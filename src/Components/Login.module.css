@@ -1,0 +1,28 @@
+html, body {
+    height: 100%; /* Ensure the full height of the window is used */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+  }
+  
+  #root, .App {
+    height: 100%; /* Ensure the container takes full height */
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack children vertically */
+  }
+  
+  .form-signin {
+    width: 100%; /* Use the full width of the container */
+    max-width: 330px; /* Maximum width of the form */
+    padding: 15px; /* Padding around the form */
+    margin: auto; /* Margin auto for additional centering if needed */
+  }
+  
+  .form-signin h2, .form-signin h1 {
+    margin: 0 0 20px 0; /* Adjust margin as needed */
+  }
+  
+  .form-signin img {
+    margin-bottom: 20px; /* Provides space below the logo */
+  }

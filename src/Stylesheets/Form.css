@@ -1,0 +1,66 @@
+/* General form styling */
+form {
+    max-width: 600px; /* Sets a maximum width for the form */
+    margin: 20px auto; /* Centers the form on the page with margin */
+    padding: 20px; /* Adds padding inside the form */
+    background-color: #f8f9fa; /* Light grey background for the form */
+    border-radius: 8px; /* Rounded corners for the form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Label styling */
+.form-label {
+    font-weight: bold; /* Makes labels bold */
+    margin-bottom: 8px; /* Space below labels */
+    display: block; /* Ensures labels are block-level for better control */
+}
+
+/* Input field styling */
+.form-control {
+    width: 100%; /* Ensures input fields take full width */
+    padding: 8px 12px; /* Padding inside input fields */
+    border: 1px solid #ced4da; /* Subtle border for inputs */
+    border-radius: 4px; /* Rounded borders for inputs */
+    margin-bottom: 16px; /* Space below each input field */
+}
+
+/* Adjustments for fieldsets */
+fieldset {
+    padding: 10px; /* Padding inside fieldsets */
+    border-radius: 4px; /* Rounded corners for fieldsets */
+    border: 1px solid #ced4da; /* Border for fieldsets */
+}
+
+/* Legend styling inside fieldsets */
+legend {
+    padding: 0 10px; /* Padding around text in legends */
+    width: auto; /* Auto width based on content */
+    margin-bottom: 10px; /* Space below legend */
+}
+
+/* Radio button styling */
+.form-check-input {
+    margin-right: 10px; /* Space between radio button and label */
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #007bff; /* Primary blue background */
+    border-color: #007bff; /* Border color matches background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding inside button */
+    border-radius: 5px; /* Rounded corners for button */
+    font-size: 16px; /* Larger font size for readability */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    border-color: #004085; /* Matching border color on hover */
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 576px) {
+    form {
+        padding: 10px; /* Less padding on smaller screens */
+    }
+}
