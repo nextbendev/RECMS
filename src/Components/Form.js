@@ -1,173 +1,339 @@
 import React, { useState } from 'react';
 import '../Stylesheets/Form.css';
 
-
 function Form() {
-    const [role, setRole] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        email: '',
+        role: '',
+        subCat: '',
+        mailAddress: '',
+        interestAddress: '',
+        budget: '',
+        bedrooms: '',
+        Bathrooms: '',
+        location: '',
+        wantsNeeds: '',
+        propertyType: '',
+        offer: '',
+        dueDiligence: '',
+        daysForClosing: '',
+        titleCompany: '',
+        escrowAmount: '',
+        paymentType: '',
+        financeOption: '',
+        futureUse: '',
+        wantsNeeds: '',
+        commission: '',
+        sellerA: '',
+        sellerB: '',
+        time: '',
+        term: '',
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value, type, checked } = event.target;
+        if (name === 'role' && value !== 'buyer') {
+            setFormData(prevState => ({
+                ...prevState,
+                role: value,
+                subCat: '' // Reset subCat to null when role is not 'buyer'
+            }));
+        } else if (type === 'checkbox') {
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: checked
+            }));
+        } else if (type === 'select-multiple') {
+            const options = event.target.options;
+            const selectedOptions = [];
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].selected) {
+                    selectedOptions.push(options[i].value);
+                }
+            }
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: selectedOptions
+            }));
+        } else {
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('Form Data:', formData);
+        // Add logic to process or validate form data
+    };
 
     return (
-        <form>
-            <div className="mb-3">
-                <label htmlFor="name" className="form-label">Name</label>
-                <input type="text" className="form-control" id="name" required />
-            </div>
-            <div className="mb-3">
-                <label htmlFor="phone" className="form-label">Phone Number</label>
-                <input type="tel" className="form-control" id="phone" required />
-            </div>
-            <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email Address</label>
-                <input type="email" className="form-control" id="email" required />
-            </div>
-            {/* <div className="mb-3">
-                <label htmlFor="business" className="form-label">Business</label>
-                <input type="text" className="form-control" id="business" />
-            </div> */}
-            
-            <div className="mb-3">
-                <label className="form-label">Role</label>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="role" id="investor" value="investor" onChange={() => setRole('investor')} />
-                    <label className="form-check-label" htmlFor="investor">Investor</label>
+        <form onSubmit={handleSubmit} className="container mt-4">
+            <div className="row mb-3">
+                <div className="col-md-6">
+                    <label htmlFor="name" className="form-label">Full Name</label>
+                    <input type="text" className="form-control" id="name" name="name" value={formData.name} onChange={handleInputChange} required />
                 </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="role" id="seller" value="seller" onChange={() => setRole('seller')} />
-                    <label className="form-check-label" htmlFor="seller">Seller</label>
+                <div className="col-md-6">
+                    <label htmlFor="phone" className="form-label">Phone Number</label>
+                    <input type="tel" className="form-control" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} required />
                 </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="role" id="buyer" value="buyer" onChange={() => setRole('buyer')} />
-                    <label className="form-check-label" htmlFor="buyer">Buyer</label>
+                <div className="col-md-6">
+                    <label htmlFor="email" className="form-label">Email Address</label>
+                    <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
                 </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="radio" name="role" id="offer" value="offer" onChange={() => setRole('offer')} />
-                    <label className="form-check-label" htmlFor="offer">Offer</label>
+                <div className="col-md-6">
+                    <label htmlFor="preferredContactMethod" className="form-label">Preferred Contact Method</label>
+                    <select className="form-control" id="preferredContactMethod" name="preferredContactMethod" value={formData.preferredContactMethod} onChange={handleInputChange} required>
+                        <option value="phone">Phone</option>
+                        <option value="email">Email</option>
+                        <option value="text">Text</option>
+                    </select>
                 </div>
             </div>
-            <div className="mb-3">
-                <label className="form-label">Property Type</label>
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" name="role" id="commercial" value="commercial"  />
-                    <label className="form-check-label" htmlFor="commercial">Commercial</label>
-                </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" name="role" id="residential" value="residential" />
-                    <label className="form-check-label" htmlFor="residential">Residential</label>
-                </div>
-                <div className="form-check">
-                    <input className="form-check-input" type="checkbox" name="role" id="land" value="land"/>
-                    <label className="form-check-label" htmlFor="land">Land</label>
+            <div className="row mb-3">
+                <div className="col-md-6">
+                    <label className="form-label">Role</label>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="role" id="seller" value="seller" onChange={handleInputChange} />
+                        <label className="form-check-label" htmlFor="seller">Seller</label>
+                    </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="role" id="buyer" value="buyer" onChange={handleInputChange} />
+                        <label className="form-check-label" htmlFor="buyer">Buyer</label>
+                    </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="role" id="investor" value="investor" onChange={handleInputChange} />
+                        <label className="form-check-label" htmlFor="investor">Investor</label>
+                    </div>
+                    <div className="form-check">
+                        <input className="form-check-input" type="radio" name="role" id="prospect" value="prospect" onChange={handleInputChange} />
+                        <label className="form-check-label" htmlFor="prospect">Prospect</label>
+                    </div>
                 </div>
             </div>
-            {role === 'buyer' && (
-                <div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerName" className="form-label">Name</label>
-                        <input type="text" className="form-control" id="buyerName" />
+
+            {formData.role === 'prospect' && (
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="mailAddress" className="form-label">Mailing Address</label>
+                        <input type="text" className="form-control" id="mailAddress" name="mailAddress" value={formData.mailAddress} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerBudget" className="form-label">Budget</label>
-                        <input type="text" className="form-control" id="buyerBudget" />
+                    <div className="col-md-6">
+                        <label htmlFor="interestAddress" className="form-label">Address of Interest</label>
+                        <input type="text" className="form-control" id="interestAddress" name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerBedrooms" className="form-label">Bedrooms</label>
-                        <input type="number" className="form-control" id="buyerBedrooms" />
+                    <div className="col-md-6">
+                        <label htmlFor="leadBudget" className="form-label">Budget</label>
+                        <input type="text" className="form-control" id="leadBudget" name="leadBudget" value={formData.leadBudget} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerBathrooms" className="form-label">Bathrooms</label>
-                        <input type="number" className="form-control" id="buyerBathrooms" />
+                    <div className="col-md-6">
+                        <label htmlFor="leadBedrooms" className="form-label">Bedrooms</label>
+                        <input type="number" className="form-control" id="leadBedrooms" name="leadBedrooms" value={formData.leadBedrooms} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerLocation" className="form-label">Location</label>
-                        <input type="text" className="form-control" id="buyerLocation" />
+                    <div className="col-md-6">
+                        <label htmlFor="leadBathrooms" className="form-label">Bathrooms</label>
+                        <input type="number" className="form-control" id="leadBathrooms" name="leadBathrooms" value={formData.leadBathrooms} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerWantsNeeds" className="form-label">Wants / Needs</label>
-                        <input type="text" className="form-control" id="buyerWantsNeeds" />
+                    <div className="col-md-6">
+                        <label htmlFor="leadLocation" className="form-label">Preferred Location</label>
+                        <input type="text" className="form-control" id="leadLocation" name="leadLocation" value={formData.leadLocation} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="leadPropertyType" className="form-label">Property Type</label>
+                        <select className="form-control" id="leadPropertyType" name="leadPropertyType" multiple value={formData.leadPropertyType} onChange={handleInputChange}>
+                            <option value="commercial">Commercial</option>
+                            <option value="residential">Residential</option>
+                            <option value="land">Land</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="leadWantsNeeds" className="form-label">Specific Wants/Needs</label>
+                        <textarea className="form-control" id="leadWantsNeeds" name="leadWantsNeeds" value={formData.leadWantsNeeds} onChange={handleInputChange}></textarea>
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="timeFrame" className="form-label">Time Frame for Purchase</label>
+                        <input type="text" className="form-control" id="timeFrame" name="timeFrame" value={formData.timeFrame} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="financingStatus" className="form-label">Financing Status</label>
+                        <select className="form-control" id="financingStatus" name="financingStatus" value={formData.financingStatus} onChange={handleInputChange}>
+                            <option value="pre-approved">Pre-approved</option>
+                            <option value="not approved">Not approved</option>
+                            <option value="cash buyer">Cash Buyer</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="additionalNotes" className="form-label">Additional Notes</label>
+                        <textarea className="form-control" id="additionalNotes" name="additionalNotes" value={formData.additionalNotes} onChange={handleInputChange}></textarea>
                     </div>
                 </div>
+            )}
+
+
+            {formData.role === 'buyer' && (
+                <div className="row mb-3">
+                    {/* <div className="col-md-6">
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio" name="subCat" id="offer" value="offer" checked={formData.subCat === 'offer'} onChange={handleInputChange} />
+                            <label className="form-check-label" htmlFor="offer">Offer</label>
+                        </div>
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio" name="subCat" id="searching" value="searching" checked={formData.subCat === 'searching'} onChange={handleInputChange} />
+                            <label className="form-check-label" htmlFor="searching">Searching</label>
+                        </div>
+                    </div> */}
                 
-            )}
-            {role === 'investor' && (
-                <div>
-                    <div className="mb-3">
-                        <label htmlFor="investorPropertyType" className="form-label">Property Type Sought</label>
-                        <input type="text" className="form-control" id="investorPropertyType" />
+                    <div className="col-md-6">
+                        <label htmlFor="mailAddress" className="form-label">Address</label>
+                        <input type="text" className="form-control" id="mailAddress" name="mailAddress" value={formData.mailAddress} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="investorFutureUse" className="form-label">Future Use</label>
-                        <input type="text" className="form-control" id="investorFutureUse" />
+                    <div className="col-md-6">
+                        <label htmlFor="name" className="form-label">Name Property Will Be Titled In</label>
+                        <input type="text" className="form-control" id="name" name="name" value={formData.name} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="investorBudget" className="form-label">Budget</label>
-                        <input type="text" className="form-control" id="investorBudget" />
+                    <div className="col-md-6">
+                        <label htmlFor="offer" className="form-label">Offer Amount</label>
+                        <input type="text" className="form-control" id="offer" name="offer" value={formData.offer} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="investorLocation" className="form-label">Location</label>
-                        <input type="text" className="form-control" id="investorLocation" />
+                    <div className="col-md-6">
+                        <label htmlFor="dueDiligence" className="form-label">Due Diligence Period</label>
+                        <input type="text" className="form-control" id="dueDiligence" name="dueDiligence" value={formData.dueDiligence} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="investorWantsNeeds" className="form-label">Wants / Needs</label>
-                        <input type="text" className="form-control" id="investorWantsNeeds" />
+                    <div className="col-md-6">
+                        <label htmlFor="daysForClosing" className="form-label">Days For Closing</label>
+                        <input type="number" className="form-control" id="daysForClosing" name="daysForClosing" value={formData.daysForClosing} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="titleCompany" className="form-label">Title Company</label>
+                        <input type="text" className="form-control" id="titleCompany" name="titleCompany" value={formData.titleCompany} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="escrowAmount" className="form-label">Escrow Amount</label>
+                        <input type="text" className="form-control" id="escrowAmount" name="escrowAmount" value={formData.escrowAmount} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="paymentType" className="form-label">Payment Type</label>
+                        <input type="text" className="form-control" id="paymentType" name="paymentType" value={formData.paymentType} onChange={handleInputChange} />
                     </div>
                 </div>
             )}
-            {role === 'seller' && (
-                <div>
-                    <div className="mb-3">
-                        <label htmlFor="sellerBudget" className="form-label">Sale Price</label>
-                        <input type="text" className="form-control" id="sellerBudget" />
+
+            {formData.subCat === 'searching' && (
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="interestAddress" className="form-label">Address of interest</label>
+                        <input type="text" className="form-control" id="interestAddress" name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="sellerCommission" className="form-label">Commission</label>
-                        <input type="number" className="form-control" id="sellerCommission" />
+                    <div className="col-md-6">
+                        <label htmlFor="budget" className="form-label">Budget</label>
+                        <input type="text" className="form-control" id="budget" name="budget" value={formData.budget} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="sellAddress" className="form-label">Address</label>
-                        <input type="text" className="form-control" id="sellAddress" />
+                    <div className="col-md-6">
+                        <label htmlFor="bedrooms" className="form-label">Bedrooms</label>
+                        <input type="number" className="form-control" id="bedrooms" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="Bathrooms" className="form-label">Bathrooms</label>
+                        <input type="number" className="form-control" id="Bathrooms" name="Bathrooms" value={formData.Bathrooms} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="location" className="form-label">Location</label>
+                        <input type="text" className="form-control" id="location" name="location" value={formData.location} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="wantsNeeds" className="form-label">Wants / Needs</label>
+                        <input type="text" className="form-control" id="wantsNeeds" name="wantsNeeds" value={formData.wantsNeeds} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="time" className="form-label">Time Needed</label>
+                        <input type="number" className="form-control" id="time" name="time" required onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="propertyType" className="form-label">Property Type</label>
+                        <select className="form-control" id="propertyType" name="propertyType" value={formData.propertyType} onChange={handleInputChange}>
+                            <option value="commercial">Commercial</option>
+                            <option value="residential">Residential</option>
+                            <option value="land">Land</option>
+                        </select>
+                        <label htmlFor="additionalNotes" className="form-label">Additional Notes</label>
+                        <textarea className="form-control" id="additionalNotes" name="additionalNotes" value={formData.additionalNotes} onChange={handleInputChange}></textarea>
+                    </div>
+                </div>
+            )}
+
+            {formData.role === 'investor' && (
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="futureUse" className="form-label">Future Use</label>
+                        <input type="text" className="form-control" id="futureUse" name="futureUse" value={formData.futureUse} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="budget" className="form-label">Budget</label>
+                        <input type="text" className="form-control" id="budget" name="budget" value={formData.budget} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="location" className="form-label">Location</label>
+                        <input type="text" className="form-control" id="location" name="location" value={formData.location} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="wantsNeeds" className="form-label">Wants / Needs</label>
+                        <input type="text" className="form-control" id="wantsNeeds" name="wantsNeeds" value={formData.wantsNeeds} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="propertyType" className="form-label">Property Type</label>
+                        <select className="form-control" id="propertyType" name="propertyType" value={formData.propertyType} onChange={handleInputChange}>
+                            <option value="commercial">Commercial</option>
+                            <option value="residential">Residential</option>
+                            <option value="land">Land</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="time" className="form-label">Time Needed</label>
+                        <input type="text" className="form-control" id="time" name="time" required onChange={handleInputChange} />
+                    </div>
+                </div>
+            )}
+
+            {formData.role === 'seller' && (
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="interestAddress" className="form-label">Address</label>
+                        <input type="text" className="form-control" id="interestAddress" name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="budget" className="form-label">Sale Price</label>
+                        <input type="text" className="form-control" id="budget" name="budget" value={formData.budget} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="commission" className="form-label">Commission</label>
+                        <input type="number" className="form-control" id="commission" name="commission" value={formData.commission} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="term" className="form-label">Contract Expiration</label>
+                        <input type="date" className="form-control" id="term" name="term" value={formData.term} onChange={handleInputChange} />
+                    </div>
+                    <div className="col-md-6">
                         <label htmlFor="sellerA" className="form-label">Seller A Email</label>
-                        <input type="text" className="form-control" id="sellerA" />
+                        <input type="email" className="form-control" id="sellerA" name="sellerA" value={formData.sellerA} onChange={handleInputChange} />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-md-6">
                         <label htmlFor="sellerB" className="form-label">Seller B Email</label>
-                        <input type="text" className="form-control" id="sellerB" />
+                        <input type="email" className="form-control" id="sellerB" name="sellerB" value={formData.sellerB} onChange={handleInputChange} />
                     </div>
                 </div>
+
             )}
-            {role === 'offer' && (
-                <div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerName" className="form-label">Name Property Will Be Titled In</label>
-                        <input type="text" className="form-control" id="buyerName" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerOffer" className="form-label">Offer Amount</label>
-                        <input type="text" className="form-control" id="buyerOffer" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerDueDilligence" className="form-label">Due Dilligence Period</label>
-                        <input type="text" className="form-control" id="buyerDueDilligence" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerDaysForClosing" className="form-label">Days For Closing</label>
-                        <input type="text" className="form-control" id="buyerDaysForClosing" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerTitleCompany" className="form-label">Title Company</label>
-                        <input type="text" className="form-control" id="buyerTitleCompany" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerEscrowAmount" className="form-label">Escrow Amount</label>
-                        <input type="text" className="form-control" id="buyerEscrowAmount" />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="buyerPaymentType" className="form-label">Payment Type</label>
-                        <input type="text" className="form-control" id="buyerPaymentType" />
-                    </div>
+
+            <div className="row mb-3">
+                <div className="col-md-12">
+                    <button type="submit" className="btn btn-primary w-100">Submit</button>
                 </div>
-            )}
-            <button type="submit" className="btn btn-primary">Submit</button>
+            </div>
         </form>
     );
 }

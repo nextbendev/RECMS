@@ -1,0 +1,34 @@
+/* src/Components/EditUserForm.css */
+
+.edit-user-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .form-group {
+    flex: 1 1 45%;
+    min-width: 200px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  
+  button[type="submit"] {
+    flex: 1 1 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+  }
+  

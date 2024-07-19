@@ -64,3 +64,9 @@ legend {
         padding: 10px; /* Less padding on smaller screens */
     }
 }
+
+/* Stylesheets/Form.css */
+.form-check-inline {
+    display: inline-block;
+    margin-right: 10px;
+}
