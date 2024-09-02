@@ -2,6 +2,7 @@
 import React from 'react';
 
 function UserDetails({ userData }) {
+  console.log("userdata", userData)
   return (
     <div className="container mt-4">
       <h1 className="mb-4">User Details</h1>
@@ -116,12 +117,7 @@ function UserDetails({ userData }) {
                     <p className="form-control-plaintext">{userData.dueDiligence}</p>
                   </div>
                 )}
-                {userData.daysForInspection && (
-                  <div className="col-md-6">
-                    <label className="form-label">Days For Inspection</label>
-                    <p className="form-control-plaintext">{userData.daysForInspection}</p>
-                  </div>
-                )}
+               
                 {userData.daysForClosing && (
                   <div className="col-md-6">
                     <label className="form-label">Days For Closing</label>

@@ -1,9 +1,9 @@
-// src/Pages/Customers.js
+// src/Pages/Contacts.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Customers() {
-  const [customers, setCustomers] = useState([]);
+function Contacts() {
+  const [contacts, setContacts] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ function Customers() {
         name: 'John Doe',
         email: 'john@example.com',
         phone: '123-456-7890',
-        address: '123 Main St',
+        mailAddress: '123 Main St',
         role: 'buyer',
         interestAddress: '123 Main St',
         budget: '500000',
@@ -34,7 +34,7 @@ function Customers() {
         name: 'Jane Smith',
         email: 'jane@example.com',
         phone: '234-567-8901',
-        address: '456 Elm St',
+        mailAddress: '456 Elm St',
         role: 'seller',
         interestAddress: '456 Elm St',
         budget: '450000',
@@ -52,7 +52,7 @@ function Customers() {
         name: 'Bob Johnson',
         email: 'bob@example.com',
         phone: '345-678-9012',
-        address: '789 Oak St',
+        mailAddress: '789 Oak St',
         role: 'investor',
         propertyType: 'Commercial',
         futureUse: 'Rental',
@@ -69,7 +69,7 @@ function Customers() {
         name: 'Alice Brown',
         email: 'alice@example.com',
         phone: '456-789-0123',
-        address: '101 Pine St',
+        mailAddress: '101 Pine St',
         role: 'lead',
         interestAddress: '101 Pine St',
         budget: '600000',
@@ -113,17 +113,17 @@ function Customers() {
       },
     ];
 
-    setCustomers(dummyData);
+    setContacts(dummyData);
   }, []);
 
-  const handleCustomerClick = (customer) => {
-    console.log("Navigating to customer:", customer); // Debugging line
-    navigate(`/customer/${customer.id}`, { state: { customer } });
+  const handleContactClick = (contact) => {
+    console.log("Navigating to contact:", contact); // Debugging line
+    navigate(`/contact/${contact.id}`, { state: { contact } });
   };
 
   return (
     <div>
-      <h2>Customers</h2>
+      <h2>Contacts</h2>
       <div className="table-responsive">
         <table className="table table-striped table-sm">
           <thead>
@@ -136,13 +136,13 @@ function Customers() {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer, index) => (
-              <tr key={customer.id} onClick={() => handleCustomerClick(customer)}>
+            {contacts.map((contact, index) => (
+              <tr key={contact.id} onClick={() => handleContactClick(contact)}>
                 <td>{index + 1}</td>
-                <td>{customer.name}</td>
-                <td>{customer.email}</td>
-                <td>{customer.phone}</td>
-                <td>{customer.address}</td>
+                <td>{contact.name}</td>
+                <td>{contact.email}</td>
+                <td>{contact.phone}</td>
+                <td>{contact.address}</td>
               </tr>
             ))}
           </tbody>
@@ -152,4 +152,4 @@ function Customers() {
   );
 }
 
-export default Customers;
+export default Contacts;

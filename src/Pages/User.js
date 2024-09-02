@@ -7,7 +7,8 @@ import EditUserForm from '../Components/EditUserForm';
 
 function User() {
   const location = useLocation();
-  const user = location.state?.customer || location.state?.prospect || {};  // Ensure user is defined
+  const user = location.state?.contact || {};  // Use 'contact' to match the key in Contacts.js
+
   const [tasks, setTasks] = useState(user.tasks || []);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({ ...user });

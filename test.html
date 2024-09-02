@@ -1,22 +1,48 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.104.2">
-  <title>Dashboard Template · Bootstrap v5.2</title>
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+function RealEstateEntries({ properties }) {
+    const [currentPage, setCurrentPage] = useState(1);
+    const propertiesPerPage = 12; // Adjust this as needed
+    const totalPages = Math.ceil(properties.length / propertiesPerPage);
+    const navigate = useNavigate(); // Hook to enable navigation
 
-  <style>
-    
-  </style>
+    const indexOfLastProperty = currentPage * propertiesPerPage;
+    const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
+    const currentProperties = properties.slice(indexOfFirstProperty, indexOfLastProperty);
 
-  <!-- Custom styles for this template -->
-  
-</head>
-<body>
+    // Function to handle clicking on a property
+    const handlePropertyClick = (propertyId) => {
+        navigate(`/property/${propertyId}`); // Navigate to PropertyDetail page
+    };
 
-</body>
-</html>
+    return (
+        <div className="container mt-3">
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                {currentProperties.map(property => (
+                    <div className="col" key={property.mlsNumber} onClick={() => handlePropertyClick(property.mlsNumber)}>
+                        <div className="card h-100">
+                            <img src={property.imageUrl} className="card-img-top" alt={`Image of ${property.streetAddress}`} style={{ height: '180px', objectFit: 'cover' }} />
+                            <div className="card-body">
+                                <h5 className="card-title">{property.streetAddress}</h5>
+                                <p className="card-text"><strong>{`${property.city}, ${property.state}`}</strong></p>
+                                {/* Additional details here */}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <nav aria-label="Page navigation example" className="mt-4">
+                <ul className="pagination justify-content-center">
+                    {[...Array(totalPages)].map((_, index) => (
+                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                            <button className="page-link" onClick={() => paginate(index + 1)}>{index + 1}</button>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+        </div>
+    );
+}
+
+export default RealEstateEntries;
