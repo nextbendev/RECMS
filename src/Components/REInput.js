@@ -29,7 +29,7 @@ function REInput() {
         cooling: '',
         windows: '',
         parkingSpaces: '',
-        propertyType: '',
+        propertyType: 'residential',
         propertySubtype: '',
         roof: '',
         businessType: '',

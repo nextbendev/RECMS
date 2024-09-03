@@ -108,7 +108,7 @@ function Prospects() {
   const handleProspectClick = (prospect) => {
     navigate(`/prospect/${prospect.id}`, { state: { prospect } });
   };
-
+  console.log("prospects", prospects)
   return (
     <div>
       <h2>Prospects</h2>

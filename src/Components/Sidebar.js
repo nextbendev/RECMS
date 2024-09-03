@@ -32,6 +32,12 @@ function Sidebar() {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="/prospects">
+              <span data-feather="file" className="align-text-bottom"></span>
+              Prospects
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to="/tasks">
               <span data-feather="file" className="align-text-bottom"></span>
               Tasks
