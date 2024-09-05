@@ -8,14 +8,16 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     // State to hold user data
     const [user, setUser] = useState({
-        id: '1',
+        userId: '34895734',
         name: 'Benjamin Sommerville',
         email: 'nextbendev@gmail.com',
+        cellPhone: '863-867-5309',
+        brokerage: 'Advantage Realty #1',
+        brokerageId: '1',
         creatorId: '34895734',
-        userId: '34895734',
-        loggedIn: false
+        loggedIn: 'false',
     });
-
+    console.log(user, "user data")
     // Function to log in a user (dummy example)
     const logInUser = (userData) => {
         setUser({ ...userData, loggedIn: true });
@@ -23,7 +25,7 @@ export const UserProvider = ({ children }) => {
 
     // Function to log out a user
     const logOutUser = () => {
-        setUser({ id: null, name: '', email: '', creatorId: null, loggedIn: false });
+        setUser({  userId: null, name: '', email: '', loggedIn: false });
     };
 
     return (

@@ -5,6 +5,7 @@ function AddTaskForm({ onAddTask, contactId }) {
   const { contacts } = useContext(ContactContext); // Use the contacts from ContactsContext
   const [taskType, setTaskType] = useState('call');
   const [taskDescription, setTaskDescription] = useState('');
+  const [taskStatus, setTaskStatus] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [selectedContact, setSelectedContact] = useState(contactId || '');
 
@@ -22,6 +23,7 @@ function AddTaskForm({ onAddTask, contactId }) {
     setTaskDescription('');
     setDueDate('');
     setSelectedContact(contactId || '');
+    setTaskStatus('open');
   };
 
   return (

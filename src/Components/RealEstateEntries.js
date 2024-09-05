@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function RealEstateEntries({ properties }) {
+function RealEstateEntries({ properties, pageTitle }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const propertiesPerPage = 12;
     const navigate = useNavigate();
-
     // Filter properties based on the search term
     const filteredProperties = properties.filter(property => {
         const { streetAddress, mlsNumber, listPrice, bedrooms, bathrooms, zipCode } = property;
@@ -38,6 +37,9 @@ function RealEstateEntries({ properties }) {
     return (
         <div className="container mt-3">
             <div className="row mb-3">
+            <div>
+                <h1>{pageTitle}</h1>
+            </div>
                 <div className="col-12">
                     <input
                         type="text"
