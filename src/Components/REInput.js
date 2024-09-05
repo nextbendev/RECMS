@@ -3,6 +3,10 @@ import '../Stylesheets/Form.css';
 
 function REInput() {
     const [listing, setListing] = useState({
+        firstName: '',
+        lastName: '',
+        phone: '',
+        email: '',
         streetAddress: '',
         state: '', 
         city: '',
@@ -54,6 +58,25 @@ function REInput() {
 
     return (
         <form onSubmit={handleSubmit} className="container">
+            <div className="row mb-3">
+                <div className="col-md-2 mb-3">
+                    <label htmlFor="firstName" className="form-label">First Name</label>
+                    <input type="text" className="form-control" id="firstName" name="firstName" value={listing.firstName} onChange={handleChange} required />
+                </div>
+                <div className="col-md-2 mb-3">
+                    <label htmlFor="lastName" className="form-label">Last Name</label>
+                    <input type="text" className="form-control" id="lastName" name="lastName" value={listing.name} onChange={handleChange} required />
+                </div>
+                <div className="col-md-2 mb-3">
+                    <label htmlFor="phone" className="form-label">Phone</label>
+                    <input type="tel" className="form-control" id="phone" name="phone" value={listing.phone} onChange={handleChange} required />
+                </div>
+                <div className="col-md-2 mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input type="email" className="form-control" id="email" name="email" value={listing.email} onChange={handleChange} required />
+                </div>
+                
+            </div>
             <div className="row">
                 <div className="col-md-6">
                     <label htmlFor="propertyType" className="form-label">Property Type</label>
@@ -136,10 +159,6 @@ function REInput() {
                 <div className="col-md-6 col-lg-4 mb-3">
                     <label htmlFor="lotSquareFeet" className="form-label">Lot Size (Square Feet)</label>
                     <input type="number" className="form-control" id="lotSquareFeet" name="lotSquareFeet" value={listing.lotSquareFeet} onChange={handleChange} />
-                </div>
-                <div className="col-md-6 col-lg-4 mb-3">
-                    <label htmlFor="lotAcres" className="form-label">Lot Size (Acres)</label>
-                    <input type="number" className="form-control" id="lotAcres" name="lotAcres" value={listing.lotAcres} onChange={handleChange} />
                 </div>
                 <div className="col-md-6 col-lg-4 mb-3">
                     <label htmlFor="totalSquareFeet" className="form-label">Total Square Feet</label>

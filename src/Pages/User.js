@@ -46,7 +46,10 @@ function User() {
         <>
           <button className="btn btn-secondary mt-2" onClick={() => setIsEditing(true)}>Edit</button>
           <UserDetails userData={{ ...userData, tasks }} />
-          <AddTaskForm onAddTask={handleAddTask} />
+          <AddTaskForm 
+            onAddTask={handleAddTask} 
+            contactId={user.id}  
+          />
         </>
       )}
       

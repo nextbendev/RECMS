@@ -1,12 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ContactContext } from '../contexts/ContactsContext'; // Import the custom hook
 
-function AddTaskForm({ onAddTask }) {
+function AddTaskForm({ onAddTask, contactId }) {
   const { contacts } = useContext(ContactContext); // Use the contacts from ContactsContext
   const [taskType, setTaskType] = useState('call');
   const [taskDescription, setTaskDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [selectedContact, setSelectedContact] = useState('');
+  const [selectedContact, setSelectedContact] = useState(contactId || '');
+
+  useEffect(() => {
+    if (contactId) {
+      setSelectedContact(contactId);
+    }
+  }, [contactId]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +21,7 @@ function AddTaskForm({ onAddTask }) {
     setTaskType('call');
     setTaskDescription('');
     setDueDate('');
-    setSelectedContact('');
+    setSelectedContact(contactId || '');
   };
 
   return (
@@ -59,23 +66,26 @@ function AddTaskForm({ onAddTask }) {
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="contact" className="form-label">Associate with Contact</label>
-        <select
-          className="form-control"
-          id="contact"
-          value={selectedContact}
-          onChange={(e) => setSelectedContact(e.target.value)}
-          required
-        >
-          <option value="">Select Contact</option>
-          {contacts.map((contact) => (
-            <option key={contact.id} value={contact.id}>
-              {contact.name} - {contact.email}
-            </option>
-          ))}
-        </select>
-      </div>
+      {!contactId && (
+        <div className="mb-3">
+          <label htmlFor="contact" className="form-label">Contact</label>
+          <select
+            className="form-control"
+            id="contact"
+            value={selectedContact}
+            onChange={(e) => setSelectedContact(e.target.value)}
+            required
+          >
+            <option value="">Select Contact</option>
+            {contacts.map((contact) => (
+              <option key={contact.id} value={contact.id}>
+                {contact.name} - {contact.email}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
 
       <button type="submit" className="btn btn-primary">Add Task</button>
     </form>

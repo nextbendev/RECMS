@@ -196,7 +196,7 @@ function EndUser() {
             </div>
         </div>
     
-        <div className="row mb-3">
+        {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="time" className="form-label">Time Needed</label>
                 <input type="number" className="form-control" id="time" name="time" value={formData.time} onChange={handleInputChange} />
@@ -205,7 +205,7 @@ function EndUser() {
                 <label htmlFor="term" className="form-label">Contract Expiration</label>
                 <input type="date" className="form-control" id="term" name="term" value={formData.term} onChange={handleInputChange} />
             </div>
-        </div>
+        </div> */}
     
         <div className="row mb-3">
             <div className="col-md-12 text-center">

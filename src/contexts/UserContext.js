@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
         name: 'Benjamin Sommerville',
         email: 'nextbendev@gmail.com',
         creatorId: '34895734',
+        userId: '34895734',
         loggedIn: false
     });
 
