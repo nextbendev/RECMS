@@ -1,17 +1,20 @@
-// src/Components/AddTaskForm.js
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { ContactContext } from '../contexts/ContactsContext'; // Import the custom hook
 
 function AddTaskForm({ onAddTask }) {
+  const { contacts } = useContext(ContactContext); // Use the contacts from ContactsContext
   const [taskType, setTaskType] = useState('call');
   const [taskDescription, setTaskDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [selectedContact, setSelectedContact] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddTask({ taskType, taskDescription, dueDate });
+    onAddTask({ taskType, taskDescription, dueDate, contactId: selectedContact });
     setTaskType('call');
     setTaskDescription('');
     setDueDate('');
+    setSelectedContact('');
   };
 
   return (
@@ -31,6 +34,7 @@ function AddTaskForm({ onAddTask }) {
           <option value="appointment">Appointment</option>
         </select>
       </div>
+
       <div className="mb-3">
         <label htmlFor="taskDescription" className="form-label">Task Description</label>
         <input
@@ -42,6 +46,7 @@ function AddTaskForm({ onAddTask }) {
           required
         />
       </div>
+
       <div className="mb-3">
         <label htmlFor="dueDate" className="form-label">Due Date</label>
         <input
@@ -53,6 +58,25 @@ function AddTaskForm({ onAddTask }) {
           required
         />
       </div>
+
+      <div className="mb-3">
+        <label htmlFor="contact" className="form-label">Associate with Contact</label>
+        <select
+          className="form-control"
+          id="contact"
+          value={selectedContact}
+          onChange={(e) => setSelectedContact(e.target.value)}
+          required
+        >
+          <option value="">Select Contact</option>
+          {contacts.map((contact) => (
+            <option key={contact.id} value={contact.id}>
+              {contact.name} - {contact.email}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <button type="submit" className="btn btn-primary">Add Task</button>
     </form>
   );

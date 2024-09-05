@@ -18,14 +18,14 @@ function Prospects() {
         address: '1725 Slough Avenue',
         role: 'prospect',
         interestAddress: '1725 Slough Avenue',
-        leadBudget: '300000',
-        leadBedrooms: 2,
-        leadBathrooms: 1,
-        leadLocation: 'Scranton',
-        leadWantsNeeds: 'Close to office',
+        budget: '300000',
+        bedrooms: 2,
+        bathrooms: 1,
+        location: 'Scranton',
+        wantsNeeds: 'Close to office',
         sellerA: 'janeA@example.com',
         timeFrame: '1 month',
-        leadPropertyType: ['Residential'],
+        propertyType: ['Residential'],
         financingStatus: 'Pre-approved',
         additionalNotes: 'N/A',
         tasks: [
@@ -108,7 +108,7 @@ function Prospects() {
   const handleProspectClick = (prospect) => {
     navigate(`/prospect/${prospect.id}`, { state: { prospect } });
   };
-  console.log("prospects", prospects)
+  
   return (
     <div>
       <h2>Prospects</h2>

@@ -27,7 +27,6 @@ function Form() {
         paymentType: '',
         financeOption: '',
         futureUse: '',
-        wantsNeeds: '',
         commission: '',
         sellerA: '',
         sellerB: '',
@@ -68,11 +67,11 @@ function Form() {
         }
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('Form Data:', formData);
-        // Add logic to process or validate form data
-    };
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     console.log('Form Data:', formData);
+    //     // Add logic to process or validate form data
+    // };
 
     return (
         <div className="container mt-4">
@@ -80,12 +79,12 @@ function Form() {
                 <label htmlFor="role" className="form-label">Select Role</label>
                 <select className="form-control" id="role" name="role" value={formData.role} onChange={handleInputChange}>
                     <option value="">Select</option>
-                    <option value="customer">Customer</option>
+                    <option value="contact">Contact</option>
                     <option value="re">Real Estate</option>
                 </select>
             </div>
 
-            {formData.role === 'customer' && (
+            {formData.role === 'contact' && (
                 <div>
                     <h3>Customer Specific Information</h3>
                     <EndUser />

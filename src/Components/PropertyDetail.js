@@ -17,6 +17,13 @@ function PropertyDetail() {
         return <div>Loading...</div>;
     }
 
+    let imageUrl;
+    try {
+        imageUrl = require(`../assets/${property.imageUrl}`);
+    } catch (err) {
+        imageUrl = 'https://via.placeholder.com/150';  // Fallback to placeholder image
+    }
+
     return (
         <div className="container">
             <div className="d-flex justify-content-between align-items-center">
@@ -25,7 +32,7 @@ function PropertyDetail() {
             </div>
             <h1>Property Details</h1>
             <div className="card">
-                <img src={property.imageUrl} className="card-img-top" alt="Property" />
+                <img src={imageUrl} className="card-img-top" alt="Property" />
                 <div className="card-body">
                     <h5 className="card-title">{property.streetAddress}</h5>
                     <p className="card-text">{property.city}, {property.state}</p>

@@ -11,7 +11,7 @@ function Header() {
       </button>
       <div className="navbar-nav">
         <div className="nav-item text-nowrap">
-          <Link className="nav-link px-3" to="/login">Sign out</Link>
+          <Link className="nav-link px-3" to="/login">Sign In</Link>
         </div>
       </div>
     </header>

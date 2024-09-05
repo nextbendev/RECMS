@@ -14,13 +14,13 @@ function Sidebar() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/listings">
+            <Link className="nav-link" to="/myListings">
               <span data-feather="file" className="align-text-bottom"></span>
               My Listings
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/listings">
+            <Link className="nav-link" to="/allListings">
               <span data-feather="file" className="align-text-bottom"></span>
               Listings
             </Link>
