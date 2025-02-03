@@ -10,7 +10,7 @@ function PropertyEdit() {
         city: '',
         state: '',
         listPrice: '',
-        mlsNumber: '',
+        parcelNumber: '',
         bedrooms: '',
         bathrooms: '',
         sellerFee: '',
@@ -20,7 +20,7 @@ function PropertyEdit() {
 
     useEffect(() => {
         // Find the property by ID and set it as initial form data
-        const property = properties.find(p => p.mlsNumber === id);
+        const property = properties.find(p => p.parcelNumber === id);
         if (property) {
             setFormData(property);
         }
@@ -37,7 +37,7 @@ function PropertyEdit() {
     const handleSubmit = (event) => {
         event.preventDefault();
         // Update properties context
-        const updatedProperties = properties.map(p => p.mlsNumber === id ? { ...formData } : p);
+        const updatedProperties = properties.map(p => p.parcelNumber === id ? { ...formData } : p);
         setProperties(updatedProperties);
         navigate(-1); // Go back to the details page or listings
     };

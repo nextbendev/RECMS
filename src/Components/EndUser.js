@@ -96,6 +96,7 @@ function EndUser() {
                 <select className="form-control" id="role" name="role" value={formData.role} onChange={handleInputChange} required>
                     <option value="contact">Contact</option>
                     <option value="prospect">Prospect</option>
+                    
                 </select>
             </div>
         </div>
@@ -103,27 +104,52 @@ function EndUser() {
         <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="mailAddress" className="form-label">Mailing Address</label>
-                <input type="text" className="form-control" id="mailAddress" name="mailAddress" value={formData.mailAddress} onChange={handleInputChange} />
+                <input
+                type="text"
+                className="form-control"
+                id="mailAddress"
+                name="mailAddress"
+                value={formData.mailAddress}
+                onChange={handleInputChange}
+                />
             </div>
             <div className="col-md-2 mb-3">
                 <label htmlFor="interestAddress" className="form-label">Address of Interest</label>
-                <input type="text" className="form-control" id="interestAddress" name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
+                <input
+                type="text"
+                className="form-control"
+                id="interestAddress"
+                name="interestAddress"
+                value={formData.interestAddress}
+                onChange={handleInputChange}
+                />
             </div>
             <div className="col-md-2 mb-3">
                 <label htmlFor="budget" className="form-label">Budget</label>
-                <input type="text" className="form-control" id="budget" name="budget" value={formData.budget} onChange={handleInputChange} />
+                <input
+                type="text"
+                className="form-control"
+                id="budget"
+                name="budget"
+                value={formData.budget}
+                onChange={handleInputChange}
+                />
             </div>
-            <div className="col-md-2 mb-3">
-                <label htmlFor="bedrooms" className="form-label">Bedrooms</label>
-                <input type="number" className="form-control" id="bedrooms" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} />
+            <div className="col-md-6 mb-3">
+                <label htmlFor="notes" className="form-label">Notes</label>
+                <textarea
+                className="form-control"
+                id="notes"
+                name="notes"
+                rows="3"
+                value={formData.notes}
+                onChange={handleInputChange}
+                ></textarea>
             </div>
-            <div className="col-md-2 mb-3">
-                <label htmlFor="Bathrooms" className="form-label">Bathrooms</label>
-                <input type="number" className="form-control" id="Bathrooms" name="Bathrooms" value={formData.Bathrooms} onChange={handleInputChange} />
             </div>
-        </div>
+
     
-        <div className="row mb-3">
+        {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="location" className="form-label">Location</label>
                 <input type="text" className="form-control" id="location" name="location" value={formData.location} onChange={handleInputChange} />
@@ -148,9 +174,9 @@ function EndUser() {
                 <label htmlFor="offer" className="form-label">Offer Amount</label>
                 <input type="text" className="form-control" id="offer" name="offer" value={formData.offer} onChange={handleInputChange} />
             </div>
-        </div>
+        </div> */}
     
-        <div className="row mb-3">
+        {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="dueDiligence" className="form-label">Due Diligence</label>
                 <input type="text" className="form-control" id="dueDiligence" name="dueDiligence" value={formData.dueDiligence} onChange={handleInputChange} />
@@ -171,9 +197,9 @@ function EndUser() {
                 <label htmlFor="paymentType" className="form-label">Payment Type</label>
                 <input type="text" className="form-control" id="paymentType" name="paymentType" value={formData.paymentType} onChange={handleInputChange} />
             </div>
-        </div>
+        </div> */}
     
-        <div className="row mb-3">
+        {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="financeOption" className="form-label">Finance Option</label>
                 <input type="text" className="form-control" id="financeOption" name="financeOption" value={formData.financeOption} onChange={handleInputChange} />
@@ -194,7 +220,7 @@ function EndUser() {
                 <label htmlFor="sellerB" className="form-label">Seller B Email</label>
                 <input type="email" className="form-control" id="sellerB" name="sellerB" value={formData.sellerB} onChange={handleInputChange} />
             </div>
-        </div>
+        </div> */}
     
         {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">

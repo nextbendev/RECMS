@@ -4,67 +4,139 @@ import { useNavigate } from 'react-router-dom';
 function RealEstateEntries({ properties, pageTitle }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
+    const [filters, setFilters] = useState({
+        zipCode: '',
+        bedrooms: '',
+        bathrooms: '',
+        acreage: '',
+        priceMin: '',
+        priceMax: '',
+        livingSqFt: '',
+        totalSqFt: '',
+        yearBuilt: '',
+        zoning: '',
+    });
     const propertiesPerPage = 12;
     const navigate = useNavigate();
-    // Filter properties based on the search term
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters({ ...filters, [name]: value });
+    };
+
+    // Filter properties based on the search term and additional filters
     const filteredProperties = properties.filter(property => {
-        const { streetAddress, mlsNumber, listPrice, bedrooms, bathrooms, zipCode } = property;
-        return (
+        const {
+            streetAddress,
+            parcelNumber,
+            listPrice,
+            bedrooms,
+            bathrooms,
+            zipCode,
+            acreage,
+            livingSqFt,
+            totalSqFt,
+            yearBuilt,
+            zoning,
+        } = property;
+    
+        const price = Number(listPrice.replace(/[^0-9.-]+/g, "")); // Convert price string to number
+    
+        const matchesSearchTerm =
             streetAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            mlsNumber.toString().includes(searchTerm) ||
-            listPrice.toString().includes(searchTerm) ||
-            bedrooms.toString().includes(searchTerm) ||
-            bathrooms.toString().includes(searchTerm) ||
-            (zipCode && zipCode.toString().includes(searchTerm))
-        );
+            parcelNumber.toString().includes(searchTerm);
+    
+        const matchesFilters =
+            (filters.zipCode === '' || zipCode?.toString() === filters.zipCode) &&
+            (filters.bedrooms === '' || bedrooms >= Number(filters.bedrooms)) &&
+            (filters.bathrooms === '' || bathrooms >= Number(filters.bathrooms)) &&
+            (filters.acreage === '' || acreage >= Number(filters.acreage)) &&
+            (filters.priceMin === '' || price >= Number(filters.priceMin)) &&
+            (filters.priceMax === '' || price <= Number(filters.priceMax)) &&
+            (filters.livingSqFt === '' || livingSqFt >= Number(filters.livingSqFt)) &&
+            (filters.totalSqFt === '' || totalSqFt >= Number(filters.totalSqFt)) &&
+            (filters.yearBuilt === '' || yearBuilt === Number(filters.yearBuilt)) &&
+            (filters.zoning === '' || zoning.toLowerCase().includes(filters.zoning.toLowerCase()));
+    
+        return matchesSearchTerm && matchesFilters;
     });
+    
 
     const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
-
-    // Fetch properties based on the current page
     const indexOfLastProperty = currentPage * propertiesPerPage;
     const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
     const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
 
-    // Function to change page
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
-    // Function to handle property click
-    const handlePropertyClick = (mlsNumber) => {
-        navigate(`/property/${mlsNumber}`);
+    const handlePropertyClick = (parcelNumber) => {
+        navigate(`/property/${parcelNumber}`);
     };
 
     return (
         <div className="container mt-3">
-            <div className="row mb-3">
-            <div>
-                <h1>{pageTitle}</h1>
-            </div>
+            <h1 className="mb-4">{pageTitle}</h1>
+
+            {/* Main Search Bar */}
+            <div className="row mb-2">
                 <div className="col-12">
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by Address, MLS Number, Price, Bedrooms, Bathrooms, Zip Code..."
+                        placeholder="Search by Address, MLS Number..."
                         value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>
 
+            {/* Compact Filter Box */}
+            <div className="card mb-3 p-2 shadow-sm">
+                <div className="row g-1">
+                    {[
+                        { name: 'zipCode', placeholder: 'Zip' },
+                        { name: 'bedrooms', placeholder: 'Beds', type: 'number' },
+                        { name: 'bathrooms', placeholder: 'Baths', type: 'number' },
+                        { name: 'acreage', placeholder: 'Acreage', type: 'number' },
+                        { name: 'priceMin', placeholder: 'Min $', type: 'number' },
+                        { name: 'priceMax', placeholder: 'Max $', type: 'number' },
+                        { name: 'livingSqFt', placeholder: 'Living SqFt', type: 'number' },
+                        { name: 'totalSqFt', placeholder: 'Total SqFt', type: 'number' },
+                        { name: 'yearBuilt', placeholder: 'Year Built', type: 'number' },
+                        { name: 'zoning', placeholder: 'Zoning' },
+                    ].map((filter, index) => (
+                        <div className="col-3 col-lg-2" key={index}>
+                            <input
+                                type={filter.type || 'text'}
+                                className="form-control form-control-sm"
+                                placeholder={filter.placeholder}
+                                name={filter.name}
+                                value={filters[filter.name]}
+                                onChange={handleFilterChange}
+                            />
+                        </div>
+                    ))}
+                    <div className="col-3 col-lg-2">
+                        <button className="btn btn-primary btn-sm w-100" onClick={() => setCurrentPage(1)}>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Properties Display */}
             <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
                 {currentProperties.map(property => {
                     let imageUrl;
                     try {
-                        // Try to load the image dynamically
                         imageUrl = require(`../assets/${property.imageUrl}`);
                     } catch (err) {
-                        // Fallback to a placeholder image if the above fails
                         imageUrl = 'https://via.placeholder.com/150';
                     }
 
                     return (
-                        <div className="col" key={property.mlsNumber} onClick={() => handlePropertyClick(property.mlsNumber)}>
-                            <div className="card h-100" style={{ cursor: 'pointer' }}>
+                        <div className="col" key={property.parcelNumber} onClick={() => handlePropertyClick(property.parcelNumber)}>
+                            <div className="card h-100 shadow-sm" style={{ cursor: 'pointer' }}>
                                 <img 
                                     src={imageUrl} 
                                     className="card-img-top" 
@@ -81,24 +153,31 @@ function RealEstateEntries({ properties, pageTitle }) {
                                         </div>
                                         <div className="col-6">
                                             <div>MLS #:</div>
-                                            <div><strong>{property.mlsNumber}</strong></div>
+                                            <div><strong>{property.parcelNumber}</strong></div>
                                         </div>
                                         <div className="col-6">
-                                            <div>Bedrooms:</div>
-                                            <div><strong>{property.bedrooms}</strong></div>
-                                        </div>
-                                        <div className="col-6">
-                                            <div>Bathrooms:</div>
-                                            <div><strong>{property.bathrooms}</strong></div>
-                                        </div>
-                                        <div className="col-6">
-                                            <div>Seller Fee:</div>
-                                            <div><strong>{property.sellerFee}%</strong></div>
+                                            <div>Bed/ Bath</div>
+                                            <div><strong>{property.bedrooms}/{property.bathrooms}</strong></div>
                                         </div>
                                         <div className="col-6">
                                             <div>Buyer Fee:</div>
                                             <div><strong>{property.buyerFee}%</strong></div>
                                         </div>
+                                        <div className="col-6">
+                                            <div>sqft</div>
+                                            <div><strong>{property.totalSqFt}</strong></div>
+                                        </div>
+                                        <div className="col-6">
+                                            <div>More Info</div>
+                                            <a
+                                                href="https://google.com"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <div><strong>Click Here</strong></div>
+                                            </a>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -111,11 +190,14 @@ function RealEstateEntries({ properties, pageTitle }) {
                 <div className="text-center mt-4">No properties found.</div>
             )}
 
+            {/* Pagination */}
             <nav aria-label="Page navigation example" className="mt-4">
                 <ul className="pagination justify-content-center">
                     {[...Array(totalPages)].map((_, index) => (
                         <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>{index + 1}</button>
+                            <button className="page-link" onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
                         </li>
                     ))}
                 </ul>
@@ -125,3 +207,4 @@ function RealEstateEntries({ properties, pageTitle }) {
 }
 
 export default RealEstateEntries;
+

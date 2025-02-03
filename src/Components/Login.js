@@ -1,66 +1,96 @@
-import React, { useState, useContext } from 'react';
-import { UserContext } from '../contexts/UserContext';  // Correctly import UserContext
+import React, { useState } from "react";
+import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import "../Stylesheets/Login.css";
 
-function Login() {
-  const { logInUser } = useContext(UserContext);  // Destructure logInUser
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function SplitLogin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // Example user data
-    const userData = {
-      userId: '34895734',
-      name: 'Benjamin Sommerville',
-      email: email,
-      cellPhone: '863-867-5309',
-      brokerage: 'Advantage Realty #1',
-      brokerageId: '1',
-      creatorId: '34895734',
-      loggedIn: true,
-    };
-
-    logInUser(userData);  // Log the user in by setting loggedIn to true
-    alert(`Login successful with Email: ${email}`);
-    console.log(userData, "data")
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log("Login submitted with email:", email);
+    // Add your login logic here
   };
 
   return (
-    <div>
-      <form className="form-signin" onSubmit={handleSubmit}>
-        <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-        <label htmlFor="inputEmail" className="visually-hidden">Email address</label>
-        <input
-          type="email"
-          id="inputEmail"
-          className="form-control"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoFocus
-        />
-        <label htmlFor="inputPassword" className="visually-hidden">Password</label>
-        <input
-          type="password"
-          id="inputPassword"
-          className="form-control"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <div className="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me" /> Remember me
-          </label>
+    <div className="split-login-container">
+      <div className="split-left">
+        <div className="intro-section">
+          <h1>Welcome to Property Pulse</h1>
+          <p>
+            Manage your listings, contacts, and tasks all in one place. Access
+            market trends, track leads, and communicate with your clients
+            effortlessly.
+          </p>
+          <ul>
+            <li>✓ Organize your properties</li>
+            <li>✓ Monitor performance trends</li>
+            <li>✓ Keep in touch with your clients</li>
+          </ul>
         </div>
-        <button className="btn btn-lg btn-primary d-block w-100" type="submit">Sign in</button>
-        <p className="mt-5 mb-3 text-muted">© 2023-2024</p>
-      </form>
+      </div>
+      <div className="split-right">
+        <div className="login-card">
+          <h3 className="text-center">Sign In</h3>
+          <p className="text-muted text-center">Access your dashboard</p>
+
+          <form onSubmit={handleLogin}>
+            {/* Email Input */}
+            <div className="input-group">
+              <span className="input-icon"><FaUser /></span>
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="input-group">
+              <span className="input-icon"><FaLock /></span>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <span
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+
+            {/* Remember Me & Forgot Password */}
+            <div className="login-options">
+              <label>
+                <input type="checkbox" /> Remember Me
+              </label>
+              <Link to="/forgot-password" className="forgot-password">
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Login Button */}
+            <button type="submit" className="btn btn-primary w-100">Login</button>
+          </form>
+
+          {/* Register Link */}
+          <p className="text-center mt-3">
+            Don't have an account? <Link to="/register">Sign Up</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Login;
+export default SplitLogin;

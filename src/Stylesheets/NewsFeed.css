@@ -1,0 +1,46 @@
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: red;
+    color: white;
+  }
+  
+  /* Ensure the news feed is the only scrolling section */
+.news-feed-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 500px; /* Adjust as needed */
+    padding-right: 10px;
+  }
+  
+  /* Keep sidebar and post box fixed */
+  .sidebar-container, .post-box {
+    flex-shrink: 0;
+  }
+  
+  /* Smooth scrolling effect */
+  .news-feed-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .news-feed-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+  
+  .news-feed-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+  

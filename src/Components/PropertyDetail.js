@@ -9,7 +9,7 @@ function PropertyDetail() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const foundProperty = properties.find(p => p.mlsNumber === id);
+        const foundProperty = properties.find(p => p.parcelNumber === id);
         setProperty(foundProperty);
     }, [id, properties]);
 
@@ -25,23 +25,47 @@ function PropertyDetail() {
     }
 
     return (
-        <div className="container">
-            <div className="d-flex justify-content-between align-items-center">
+        <div className="container mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-3">
                 <button className="btn btn-light btn-sm" onClick={() => navigate(-1)}>&larr; Back</button>
-                <Link to={`/edit/${property.mlsNumber}`} className="btn btn-primary btn-sm">Edit Property</Link>
+                <Link to={`/edit/${property.parcelNumber}`} className="btn btn-primary btn-sm">Edit Property</Link>
             </div>
+
             <h1>Property Details</h1>
-            <div className="card">
-                <img src={imageUrl} className="card-img-top" alt="Property" />
+
+            <div className="card shadow-sm">
+                <img src={imageUrl} className="card-img-top" alt="Property" style={{ height: '300px', objectFit: 'cover' }} />
                 <div className="card-body">
                     <h5 className="card-title">{property.streetAddress}</h5>
-                    <p className="card-text">{property.city}, {property.state}</p>
-                    <p className="card-text">List Price: ${property.listPrice}</p>
-                    <p className="card-text">MLS #: {property.mlsNumber}</p>
-                    <p className="card-text">Bedrooms: {property.bedrooms}</p>
-                    <p className="card-text">Bathrooms: {property.bathrooms}</p>
-                    <p className="card-text">Seller Fee: {property.sellerFee}%</p>
-                    <p className="card-text">Buyer Fee: {property.buyerFee}%</p>
+                    <p className="card-text"><strong>{property.city}, {property.state} {property.zipCode}</strong></p>
+                    
+                    <div className="row mt-3">
+                        <div className="col-md-6">
+                            <p><strong>List Price:</strong> ${property.listPrice}</p>
+                            <p><strong>MLS #:</strong> {property.parcelNumber}</p>
+                            <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
+                            <p><strong>Bathrooms:</strong> {property.bathrooms}</p>
+                            <p><strong>Acreage:</strong> {property.acreage} acres</p>
+                        </div>
+                        <div className="col-md-6">
+                            <p><strong>Living SqFt:</strong> {property.livingSqFt} sqft</p>
+                            <p><strong>Total SqFt:</strong> {property.totalSqFt} sqft</p>
+                            <p><strong>Year Built:</strong> {property.yearBuilt}</p>
+                            <p><strong>Zoning:</strong> {property.zoning}</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div className="row">
+                        <div className="col-md-6">
+                            <p><strong>Buyer Fee:</strong> {property.buyerFee}%</p>
+                        </div>
+                        <div className="col-md-6">
+                            <p><strong>Link</strong> {property.sellerFee}%</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
