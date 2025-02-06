@@ -1,29 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 function Sidebar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   useEffect(() => {
     const sidebarMenu = document.getElementById('sidebarMenu');
 
     if (sidebarMenu) {
-      // Add event listener to all links to close the menu on click
       const links = sidebarMenu.querySelectorAll('.nav-link');
-      const bootstrap = require('bootstrap'); // Import Bootstrap's JS API
-      const collapseInstance = bootstrap.Collapse.getInstance(sidebarMenu) || new bootstrap.Collapse(sidebarMenu, { toggle: false });
-
+      
       const handleLinkClick = () => {
-        if (collapseInstance) {
-          collapseInstance.hide(); // Close the menu
+        if (sidebarMenu.classList.contains('show')) {
+          sidebarMenu.classList.remove('show'); // Close sidebar when a link is clicked
         }
       };
 
       links.forEach(link => link.addEventListener('click', handleLinkClick));
 
       return () => {
-        // Cleanup event listeners on unmount
         links.forEach(link => link.removeEventListener('click', handleLinkClick));
       };
     }
+
+    // ✅ Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+
   }, []);
 
   return (
@@ -31,54 +44,52 @@ function Sidebar() {
       <div className="position-sticky pt-3 sidebar-sticky">
         <ul className="nav flex-column">
           <li className="nav-item">
-            <Link className="nav-link" to="/">
-              Home
-            </Link>
+            <Link className="nav-link" to="/">Home</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/feed">
-              News Feed
-            </Link>
+            <Link className="nav-link" to="/feed">News Feed</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/mailbox">
-              Mailbox
-            </Link>
+            <Link className="nav-link" to="/mailbox">Mailbox</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/messages">
-              Messenger
-            </Link>
+            <Link className="nav-link" to="/messages">Messenger</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/contacts">
-              Contacts
-            </Link>
+            <Link className="nav-link" to="/bulletinBoard">Bulletin Board</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/allListings">
-              Listings
-            </Link>
+            <Link className="nav-link" to="/contacts">Contacts</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/myListings">
-              My Listings
-            </Link>
+            <Link className="nav-link" to="/allListings">Listings</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/tasks">
-              Tasks
-            </Link>
+            <Link className="nav-link" to="/myListings">My Listings</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/form">
+            <Link className="nav-link" to="/tasks">Tasks</Link>
+          </li>
+
+          {/* ✅ Custom Functional Input Dropdown Without Bootstrap */}
+          <li className="nav-item dropdown" ref={dropdownRef}>
+            <button 
+              className="nav-link dropdown-toggle"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
               Input
-            </Link>
+            </button>
+            {isDropdownOpen && (
+              <ul className="dropdown-menu show">
+                <li><Link className="dropdown-item" to="/form" state={{ role: 'contact' }}>Contact</Link></li>
+                <li><Link className="dropdown-item" to="/form" state={{ role: 'lead' }}>Lead</Link></li>
+                <li><Link className="dropdown-item" to="/form" state={{ role: 're' }}>Listing</Link></li>
+              </ul>
+            )}
           </li>
+
           <li className="nav-item">
-            <Link className="nav-link" to="/myProfile">
-              Profile
-            </Link>
+            <Link className="nav-link" to="/myProfile">Profile</Link>
           </li>
         </ul>
       </div>

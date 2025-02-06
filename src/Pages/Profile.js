@@ -21,8 +21,8 @@ function RealEstateProfile() {
       twitter: "https://twitter.com/johndoe",
     },
     listings: [
-      { id: 1, title: "Modern Villa in Beverly Hills", price: "$3,200,000", image: "https://via.placeholder.com/300" },
-      { id: 2, title: "Luxury Penthouse in Downtown LA", price: "$2,500,000", image: "https://via.placeholder.com/300" },
+      { id: 1, title: "Modern Villa in Beverly Hills", price: "$3,200,000", image: "https://placehold.co/50" },
+      { id: 2, title: "Luxury Penthouse in Downtown LA", price: "$2,500,000", image: "https://placehold.co/50" },
     ],
   };
 
@@ -46,7 +46,7 @@ function RealEstateProfile() {
         {/* Profile Header */}
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <img src="https://via.placeholder.com/100" alt="Profile" className="rounded-circle me-3" />
+            <img src="https://placehold.co/50" alt="Profile" className="rounded-circle me-3" />
             <div>
               <h3 className="mb-1">{profile.name}</h3>
               <p className="text-muted">{profile.title} at {profile.brokerage}</p>

@@ -62,8 +62,16 @@ function PropertyDetail() {
                             <p><strong>Buyer Fee:</strong> {property.buyerFee}%</p>
                         </div>
                         <div className="col-md-6">
-                            <p><strong>Link</strong> {property.sellerFee}%</p>
+                            <div>More Info</div>
+                            <a
+                                href="https://google.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <div><strong>Click Here</strong></div>
+                            </a>
                         </div>
+                        
                     </div>
 
                 </div>

@@ -21,6 +21,9 @@ import MyProfile from './Pages/MyProfile.js';
 import NewsFeed from './Pages/NewsFeed.js';
 import Messages from './Pages/Messages.js';
 import Mailbox from './Pages/Mailbox.js';
+import ClosedTasks from './Components/ClosedTasks.js';
+import BulletinBoard from './Pages/BulletinBoard.js';
+import SignUp from './Pages/SignUp.js';
 
 function App() {
   return (
@@ -52,6 +55,9 @@ function App() {
                       <Route path="/feed" element={<NewsFeed/>} />
                       <Route path="/messages" element={<Messages/>} />
                       <Route path="/mailbox" element={<Mailbox/>} />
+                      <Route path="/closedTasks" element={<ClosedTasks/>} />
+                      <Route path="/bulletinBoard" element={<BulletinBoard/>} />
+                      <Route path="/signUp" element={<SignUp/>} />
                     </Routes>
                   </main>
                 </div>

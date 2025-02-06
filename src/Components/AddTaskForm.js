@@ -2,21 +2,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import Select from 'react-select'; // Import React-Select
 import { ContactContext } from '../contexts/ContactsContext';
 
+
 function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
   const { contacts } = useContext(ContactContext);
-  const [taskType, setTaskType] = useState('call');
+  const [taskType, setTaskType] = useState(defaultTaskType || 'call');
   const [taskDescription, setTaskDescription] = useState('');
-  const [taskStatus, setTaskStatus] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [selectedContact, setSelectedContact] = useState(null);
 
-  useEffect(() => {
-    if (defaultTaskType) {
-      setTaskType(defaultTaskType);
-    }
-  }, [defaultTaskType]);
-
-  // Convert contacts into react-select format: { value, label }
+  // Convert contacts into react-select format
   const contactOptions = contacts.map((contact) => ({
     value: contact.id,
     label: `${contact.name} - ${contact.email}`,
@@ -37,24 +31,21 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
       dueDate,
       contactId: selectedContact ? selectedContact.value : '',
     });
-    setTaskType('call');
+    setTaskType(defaultTaskType || 'call');
     setTaskDescription('');
     setDueDate('');
     setSelectedContact(null);
-    setTaskStatus('open');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container p-4 mb-4 bg-light shadow-sm rounded">
-      <h4 className="mb-3 text-center">Add New Task</h4>
+    <form onSubmit={handleSubmit} className="container bg-light shadow-sm rounded p-2">
+      <h6 className="text-center mb-2">Create Task</h6>
 
-      <div className="row">
+      <div className="row g-1">
         {/* Task Type */}
-        <div className="col-md-6 mb-3">
-          <label htmlFor="taskType" className="form-label">Task Type</label>
+        <div className="col-md-4">
           <select
-            className="form-control"
-            id="taskType"
+            className="form-select form-select-sm"
             value={taskType}
             onChange={(e) => setTaskType(e.target.value)}
             required
@@ -63,54 +54,56 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
             <option value="text">Text</option>
             <option value="email">Email</option>
             <option value="appointment">Appointment</option>
+            <option value="closing">Closing</option>
+            <option value="inspection">Inspection</option>
+            <option value="dueDilligence">Due Dilligence Over</option>
           </select>
         </div>
 
         {/* Due Date */}
-        <div className="col-md-6 mb-3">
-          <label htmlFor="dueDate" className="form-label">Due Date</label>
+        <div className="col-md-4">
           <input
             type="date"
-            className="form-control"
-            id="dueDate"
+            className="form-control form-control-sm"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             required
           />
         </div>
 
+        {/* Contact Selector (Searchable Dropdown) */}
+        {!contactId && (
+          <div className="col-md-4">
+            <Select
+              options={contactOptions}
+              value={selectedContact}
+              onChange={setSelectedContact}
+              placeholder="Select contact..."
+              isSearchable
+              classNamePrefix="react-select"
+              styles={{
+                control: (base) => ({ ...base, height: '30px', minHeight: '30px' }),
+              }}
+            />
+          </div>
+        )}
+
         {/* Task Description */}
-        <div className="col-md-6 mb-3">
-          <label htmlFor="taskDescription" className="form-label">Task Description</label>
+        <div className="col-12">
           <textarea
-            className="form-control"
-            id="taskDescription"
-            rows="2"
+            className="form-control form-control-sm"
+            style={{ height: '50px', resize: 'none' }} // Reduce input height
+            placeholder="Task Description"
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
             required
           />
         </div>
-
-        {/* Contact Selector (Searchable Dropdown) */}
-        {!contactId && (
-          <div className="col-md-6 mb-3">
-            <label className="form-label">Contact</label>
-            <Select
-              options={contactOptions}
-              value={selectedContact}
-              onChange={setSelectedContact}
-              placeholder="Search and select a contact..."
-              isSearchable
-              className="form-control p-0"
-            />
-          </div>
-        )}
       </div>
 
       {/* Submit Button */}
-      <div className="text-center">
-        <button type="submit" className="btn btn-primary w-50">Add Task</button>
+      <div className="text-center mt-2">
+        <button type="submit" className="btn btn-primary btn-sm px-3 py-1">Add</button>
       </div>
     </form>
   );

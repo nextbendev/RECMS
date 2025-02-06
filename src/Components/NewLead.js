@@ -3,19 +3,15 @@ import '../Stylesheets/Form.css';
 
 function LeadIntakeForm() {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        phone: '',
-        email: '',
-        leadSource: '',
-        interestAddress: '',
-        budget: '',
-        propertyType: '',
-        preferredContactMethod: '',
-        urgency: '',
-        financingPlan: '',
-        timelineToPurchase: '',
-        notes: '',
+        firstName: '', lastName: '', coBuyerName: '', coBuyerEmail:'', phone: '', email: '',
+        bestTimeToContact: '', leadSource: '', interestAddress: '',
+        budgetMin: '', budgetMax: '', propertyType: '', propertySubtype: '',
+        minBedrooms: '', minBathrooms: '', preferredNeighborhoods: '',
+        homeFeatures: '', homeAgePreference: '', financingPlan: '',
+        downPayment: '', loanType: '', creditScore: '', existingHomeToSell: '',
+        preApproval: '', workingWithAgent: '', preferredShowings: '',
+        timelineToPurchase: '', notes: '', coBuyerName:'', cobuyerLastName:'', cobuyerEmail:'', 
+        cobuyerPhone:'',
     });
 
     const handleInputChange = (event) => {
@@ -29,32 +25,46 @@ function LeadIntakeForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('Lead Data:', formData);
-        // Add logic to process form data
     };
 
     return (
-        <form onSubmit={handleSubmit} className="container mt-4">
+        <form onSubmit={handleSubmit} className="container bg-light shadow-sm rounded p-3">
             {/* Personal Information */}
-            <div className="row mb-3">
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="firstName" className="form-label">First Name</label>
-                    <input type="text" className="form-control" id="firstName" name="firstName" value={formData.firstName} onChange={handleInputChange} required />
+            <div className="row g-2">
+                {[
+                    { name: 'firstName', label: 'First Name' },
+                    { name: 'lastName', label: 'Last Name' },
+                    { name: 'email', label: 'Email', type: 'email' },
+                    { name: 'phone', label: 'Phone', type: 'tel' },
+                    { name: 'coBuyerName', label: 'Co-Buyer Name (if any)' },
+                    { name: 'cobuyerLastName', label: 'Last Name' },
+                    { name: 'cobuyerEmail', label: 'Email', type: 'email' },
+                    { name: 'cobuyerPhone', label: 'Phone', type: 'tel' }
+                ].map((field, idx) => (
+                    <div className="col-md-3" key={idx}>
+                        <input type={field.type || 'text'} className="form-control form-control-sm"
+                            placeholder={field.label} name={field.name} value={formData[field.name]} 
+                            onChange={handleInputChange} />
+                    </div>
+                ))}
+            </div>
+
+            {/* Contact Preferences */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-4">
+                    <label className="form-label">Best Time to Contact</label>
+                    <select className="form-select form-select-sm" name="bestTimeToContact"
+                        value={formData.bestTimeToContact} onChange={handleInputChange}>
+                        <option value="">Select Time</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="lastName" className="form-label">Last Name</label>
-                    <input type="text" className="form-control" id="lastName" name="lastName" value={formData.lastName} onChange={handleInputChange} required />
-                </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="phone" className="form-label">Phone</label>
-                    <input type="tel" className="form-control" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} required />
-                </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email" value={formData.email} onChange={handleInputChange} required />
-                </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="leadSource" className="form-label">Lead Source</label>
-                    <select className="form-control" id="leadSource" name="leadSource" value={formData.leadSource} onChange={handleInputChange}>
+                <div className="col-md-4">
+                    <label className="form-label">Lead Source</label>
+                    <select className="form-select form-select-sm" name="leadSource"
+                        value={formData.leadSource} onChange={handleInputChange}>
                         <option value="">Select Source</option>
                         <option value="referral">Referral</option>
                         <option value="socialMedia">Social Media</option>
@@ -67,18 +77,30 @@ function LeadIntakeForm() {
             </div>
 
             {/* Budget & Property Interest */}
-            <div className="row mb-3">
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="interestAddress" className="form-label">Property of Interest</label>
-                    <input type="text" className="form-control" id="interestAddress" name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
+            <div className="row g-2 mt-2">
+                <div className="col-md-4">
+                    <input type="text" className="form-control form-control-sm" placeholder="Property of Interest"
+                        name="interestAddress" value={formData.interestAddress} onChange={handleInputChange} />
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="budget" className="form-label">Budget</label>
-                    <input type="text" className="form-control" id="budget" name="budget" value={formData.budget} onChange={handleInputChange} />
+                <div className="col-md-2">
+                    <input type="text" className="form-control form-control-sm" placeholder="Min Budget"
+                        name="budgetMin" value={formData.budgetMin} onChange={handleInputChange} />
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="propertyType" className="form-label">Property Type</label>
-                    <select className="form-control" id="propertyType" name="propertyType" value={formData.propertyType} onChange={handleInputChange}>
+                <div className="col-md-2">
+                    <input type="text" className="form-control form-control-sm" placeholder="Max Budget"
+                        name="budgetMax" value={formData.budgetMax} onChange={handleInputChange} />
+                </div>
+                <div className="col-md-4">
+                    <input type="text" className="form-control form-control-sm" placeholder="Preferred Neighborhoods"
+                        name="preferredNeighborhoods" value={formData.preferredNeighborhoods} onChange={handleInputChange} />
+                </div>
+            </div>
+
+            {/* Property Preferences */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-4">
+                    <select className="form-select form-select-sm" name="propertyType" 
+                        value={formData.propertyType} onChange={handleInputChange}>
                         <option value="">Select Property Type</option>
                         <option value="singleFamily">Single-Family Home</option>
                         <option value="multiFamily">Multi-Family Home</option>
@@ -88,57 +110,52 @@ function LeadIntakeForm() {
                         <option value="commercial">Commercial Property</option>
                     </select>
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="preferredContactMethod" className="form-label">Contact by</label>
-                    <select className="form-control" id="preferredContactMethod" name="preferredContactMethod" value={formData.preferredContactMethod} onChange={handleInputChange}>
-                        <option value="phone">Phone</option>
-                        <option value="email">Email</option>
-                        <option value="text">Text</option>
-                    </select>
+                <div className="col-md-4">
+                    <input type="text" className="form-control form-control-sm" placeholder="Home Features (Pool, Garage, etc.)"
+                        name="homeFeatures" value={formData.homeFeatures} onChange={handleInputChange} />
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="urgency" className="form-label">Urgency Level</label>
-                    <select className="form-control" id="urgency" name="urgency" value={formData.urgency} onChange={handleInputChange}>
-                        <option value="">Select Urgency</option>
-                        <option value="immediate">Immediate</option>
-                        <option value="3months">Within 3 Months</option>
-                        <option value="6months">Within 6 Months</option>
-                        <option value="12months">Within a Year</option>
-                        <option value="future">Future Interest</option>
-                    </select>
+                <div className="col-md-2">
+                    <input type="number" className="form-control form-control-sm" placeholder="Min Bedrooms"
+                        name="minBedrooms" value={formData.minBedrooms} onChange={handleInputChange} />
+                </div>
+                <div className="col-md-2">
+                    <input type="number" className="form-control form-control-sm" placeholder="Min Bathrooms"
+                        name="minBathrooms" value={formData.minBathrooms} onChange={handleInputChange} />
                 </div>
             </div>
 
-            {/* Contact Preference & Urgency */}
-            <div className="row mb-3">
-                
-            </div>
-
-            {/* Financing & Timeline */}
-            <div className="row mb-3">
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="financingPlan" className="form-label">Financing Plan</label>
-                    <select className="form-control" id="financingPlan" name="financingPlan" value={formData.financingPlan} onChange={handleInputChange}>
-                        <option value="">Select Plan</option>
+            {/* Financing & Readiness */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-3">
+                    <select className="form-select form-select-sm" name="financingPlan"
+                        value={formData.financingPlan} onChange={handleInputChange}>
+                        <option value="">Financing Plan</option>
                         <option value="cash">Cash Buyer</option>
                         <option value="preApproved">Pre-Approved Loan</option>
                         <option value="seekingLoan">Seeking Loan Approval</option>
                     </select>
                 </div>
-                <div className="col-md-2 mb-3">
-                    <label htmlFor="timelineToPurchase" className="form-label">Timeline to Purchase</label>
-                    <input type="text" className="form-control" id="timelineToPurchase" name="timelineToPurchase" value={formData.timelineToPurchase} onChange={handleInputChange} />
+                <div className="col-md-3">
+                    <input type="text" className="form-control form-control-sm" placeholder="Down Payment"
+                        name="downPayment" value={formData.downPayment} onChange={handleInputChange} />
                 </div>
-                <div className="col-md-6 mb-3">
-                    <label htmlFor="notes" className="form-label">Additional Notes</label>
-                    <textarea className="form-control" id="notes" name="notes" rows="3" value={formData.notes} onChange={handleInputChange}></textarea>
+                <div className="col-md-3">
+                    <input type="text" className="form-control form-control-sm" placeholder="Loan Type (FHA, VA, etc.)"
+                        name="loanType" value={formData.loanType} onChange={handleInputChange} />
                 </div>
             </div>
-            {/* Submit Button */}
-            <div className="row mb-3">
-                <div className="col-md-12 text-center">
-                    <button type="submit" className="btn btn-primary w-50">Submit Lead</button>
+
+            {/* Notes Section */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-12">
+                    <textarea className="form-control form-control-sm" rows="3" placeholder="Additional Notes"
+                        name="notes" value={formData.notes} onChange={handleInputChange} />
                 </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="text-center mt-3">
+                <button type="submit" className="btn btn-primary btn-sm px-4 py-1">Submit Lead</button>
             </div>
         </form>
     );

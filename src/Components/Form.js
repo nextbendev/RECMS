@@ -108,19 +108,19 @@ function Form() {
 
       {formData.role === 'contact' && (
         <div>
-          <h3>Enter Contact Information</h3>
+          <h3>Contact Information</h3>
           <EndUser />
         </div>
       )}
       {formData.role === 'lead' && (
         <div>
-          <h3>Enter Lead Information</h3>
+          <h3>New Lead Information</h3>
           <LeadIntakeForm />
         </div>
       )}
       {formData.role === 're' && (
         <div>
-          <h3>Enter Listing Information</h3>
+          <h3>New Listing</h3>
           <REInput />
         </div>
       )}

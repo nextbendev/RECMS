@@ -1,0 +1,8 @@
+.custom-modal-width .modal-dialog {
+    max-width: 1200px; /* Adjust the width as needed */
+  }
+  
+  .custom-modal-width .modal-body {
+    padding: 1.5rem; /* Add padding for better spacing */
+  }
+  

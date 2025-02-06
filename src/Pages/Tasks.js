@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import AddTaskForm from '../Components/AddTaskForm';
+import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { ContactContext } from '../contexts/ContactsContext';
 import '../Stylesheets/Tasks.css';
@@ -17,7 +18,6 @@ function Tasks() {
   const [editTask, setEditTask] = useState({ taskType: '', taskDescription: '', dueDate: '', urgency: 'medium' });
   const location = useLocation();
   const taskTypeFromState = location.state?.taskType || ''; // Default to empty if none is passed
-
 
   // Load all tasks from contacts
   useEffect(() => {
@@ -59,7 +59,7 @@ function Tasks() {
     );
   };
 
-  // ✅ Use `useMemo` to improve performance
+  // ✅ Use `useMemo` for efficient filtering
   const filteredTasks = useMemo(() => ({
     high: tasks.filter((task) => task.urgency === 'high' && task.status === 'open'),
     medium: tasks.filter((task) => task.urgency === 'medium' && task.status === 'open'),
@@ -92,6 +92,7 @@ function Tasks() {
   return (
     <div className="container mt-4">
       <AddTaskForm onAddTask={handleAddTask} defaultTaskType={taskTypeFromState} />
+
       <div className="row">
         {['high', 'medium', 'low'].map((urgency) => (
           <div className="col-lg-4 col-md-6 col-sm-12 mb-4" key={urgency}>
@@ -103,7 +104,7 @@ function Tasks() {
                 </button>
               </div>
               {!collapsedSections[urgency] && (
-                <div className="card-body">
+                <div className="card-body" style={{ maxHeight: '150px', overflowY: 'auto' }}>
                   {filteredTasks[urgency].length === 0 ? (
                     <p className="text-center text-muted">No tasks available</p>
                   ) : (
@@ -134,18 +135,19 @@ function Tasks() {
         <div className="col-12 mt-3">
           <div className="card border-secondary">
             <div className="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-              <span>Closed Tasks</span>
+            <Link to="/closedTasks" className="text-white text-decoration-none">Closed Tasks</Link>
+
               <button className="btn btn-sm btn-light" onClick={() => toggleSection('closed')}>
                 {collapsedSections.closed ? '▼' : '▲'}
               </button>
             </div>
             {!collapsedSections.closed && (
-              <div className="card-body">
+              <div className="card-body" style={{ maxHeight: '250px', overflowY: 'auto' }}>
                 {filteredTasks.closed.length === 0 ? (
                   <p className="text-center text-muted">No closed tasks</p>
                 ) : (
                   <ul className="list-group list-group-flush">
-                    {filteredTasks.closed.map((task) => (
+                    {filteredTasks.closed.slice(0, 10).map((task) => (
                       <li key={task.taskId} className="list-group-item">
                         <strong>{task.taskType}</strong> ({task.contactName}): {task.taskDescription} - {task.dueDate}
                       </li>
@@ -157,28 +159,6 @@ function Tasks() {
           </div>
         </div>
       </div>
-
-      {/* Edit Task Modal */}
-      {isEditModalOpen && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Task</h5>
-                <button type="button" className="btn-close" onClick={closeEditModal}></button>
-              </div>
-              <div className="modal-body">
-                <label className="form-label">Task Description</label>
-                <input type="text" className="form-control" value={editTask.taskDescription} onChange={(e) => setEditTask({ ...editTask, taskDescription: e.target.value })} />
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
-                <button className="btn btn-primary" onClick={saveEditedTask}>Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

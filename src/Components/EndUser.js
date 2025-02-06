@@ -124,17 +124,6 @@ function EndUser() {
                 onChange={handleInputChange}
                 />
             </div>
-            <div className="col-md-2 mb-3">
-                <label htmlFor="budget" className="form-label">Budget</label>
-                <input
-                type="text"
-                className="form-control"
-                id="budget"
-                name="budget"
-                value={formData.budget}
-                onChange={handleInputChange}
-                />
-            </div>
             <div className="col-md-6 mb-3">
                 <label htmlFor="notes" className="form-label">Notes</label>
                 <textarea
@@ -149,7 +138,7 @@ function EndUser() {
             </div>
 
     
-        {/* <div className="row mb-3">
+        <div className="row mb-3">
             <div className="col-md-2 mb-3">
                 <label htmlFor="location" className="form-label">Location</label>
                 <input type="text" className="form-control" id="location" name="location" value={formData.location} onChange={handleInputChange} />
@@ -174,7 +163,7 @@ function EndUser() {
                 <label htmlFor="offer" className="form-label">Offer Amount</label>
                 <input type="text" className="form-control" id="offer" name="offer" value={formData.offer} onChange={handleInputChange} />
             </div>
-        </div> */}
+        </div>
     
         {/* <div className="row mb-3">
             <div className="col-md-2 mb-3">

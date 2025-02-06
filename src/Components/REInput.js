@@ -10,30 +10,15 @@ const addMonths = (months) => {
 
 function REInput() {
     const [listing, setListing] = useState({
-        firstName: '',        // First Name
-        lastName: '',         // Last Name
-        phone: '',            // Phone
-        email: '',            // Email
-        propertyType: 'residential',  // Property Type (default to 'residential')
-        propertySubtype: '',  // Subtype
-        lotAcres: '',         // Lot Size (Acres)
-        titleCompany: '',     // Title Company
-        streetAddress: '',    // Street Address
-        city: '',             // City
-        state: '',            // State
-        zipCode: '',          // Zip Code
-        bedrooms: '',         // Bedrooms
-        bathrooms: '',        // Bathrooms
-        halfBathrooms: '',    // Half Bathrooms
-        contractLength: '',   // Contract Length (3, 6, or 12 months)
-        listingExpires: '',   // Expiration Date (date picker)
-        listPrice: '',        // List Price
-        sellerFee: '',        // Compensation
-        parcelNumber: '',     // Parcel Number
-        listingLink: '',
-        
-      });
-      
+        firstName: '', lastName: '', phone: '', email: '',
+        propertyType: 'null', propertySubtype: 'null',
+        lotAcres: '', titleCompany: '', streetAddress: '',
+        city: '', state: '', zipCode: '', bedrooms: '',
+        bathrooms: '', halfBathrooms: '', contractLength: '',
+        listingExpires: '', listPrice: '', sellerFee: '',
+        parcelNumber: '', listingLink: '', mlsNumber: '', 
+        status: '', propertyDescription: '',
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,15 +28,13 @@ function REInput() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(listing);
-        // Submit logic here
     };
 
     const handleListingExpiresChange = (months) => {
-        const expirationDate = addMonths(months);
         setListing({
             ...listing,
-            listingExpires: expirationDate,
-            contractLength: months.toString(), // Set the selected radio button
+            listingExpires: addMonths(months),
+            contractLength: months.toString(),
         });
     };
 
@@ -59,44 +42,57 @@ function REInput() {
         setListing({
             ...listing,
             listingExpires: e.target.value,
-            contractLength: '', // Unselect the radio buttons
+            contractLength: '',
         });
     };
 
-    
-
     return (
-        <form onSubmit={handleSubmit} className="container">
-            <div className="row mb-3">
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="firstName" className="form-label">First Name</label>
-                    <input type="text" className="form-control" id="firstName" name="firstName" value={listing.firstName} onChange={handleChange} required />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="lastName" className="form-label">Last Name</label>
-                    <input type="text" className="form-control" id="lastName" name="lastName" value={listing.lastName} onChange={handleChange} required />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="phone" className="form-label">Phone</label>
-                    <input type="tel" className="form-control" id="phone" name="phone" value={listing.phone} onChange={handleChange} required />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email" value={listing.email} onChange={handleChange} required />
-                </div>
+        <form onSubmit={handleSubmit} className="container bg-light shadow-sm rounded p-3">
+            {/* Basic Info */}
+            <div className="row g-2">
+                {[
+                    { name: 'firstName', label: 'First Name' },
+                    { name: 'lastName', label: 'Last Name' },
+                    { name: 'phone', label: 'Phone', type: 'tel' },
+                    { name: 'email', label: 'Email', type: 'email' }
+                ].map((field, idx) => (
+                    <div className="col-md-3" key={idx}>
+                        <input type={field.type || 'text'} className="form-control form-control-sm" placeholder={field.label}
+                            name={field.name} value={listing[field.name]} onChange={handleChange} required />
+                    </div>
+                ))}
             </div>
-            <div className="row mb-3">
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="propertyType" className="form-label">Property Type</label>
-                    <select className="form-control" id="propertyType" name="propertyType" value={listing.propertyType} onChange={handleChange} required>
+
+            {/* Location */}
+            <div className="row g-2 mt-2">
+                {[
+                    { name: 'streetAddress', label: 'Street Address' },
+                    { name: 'city', label: 'City' },
+                    { name: 'state', label: 'State' },
+                    { name: 'zipCode', label: 'Zip Code' }
+                ].map((field, idx) => (
+                    <div className="col-md-3" key={idx}>
+                        <input type="text" className="form-control form-control-sm" placeholder={field.label}
+                            name={field.name} value={listing[field.name]} onChange={handleChange} />
+                    </div>
+                ))}
+            </div>
+
+            {/* Property Type & Subtype */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-3">
+                    <label className="form-label">Property Type</label>
+                    <select className="form-select form-select-sm" name="propertyType" value={listing.propertyType} onChange={handleChange} required>
+                        <option value="null">Property Type</option>
                         <option value="residential">Residential</option>
                         <option value="commercial">Commercial</option>
                         <option value="land">Land</option>
                     </select>
                 </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="propertySubtype" className="form-label">Subtype</label>
-                    <select className="form-control" id="propertySubtype" name="propertySubtype" value={listing.propertySubtype} onChange={handleChange} required>
+                <div className="col-md-3">
+                    <label className="form-label">Property Subtype</label>
+                    <select className="form-select form-select-sm" name="propertySubtype" value={listing.propertySubtype} onChange={handleChange} required>
+                        <option value="null">Property Subtype</option>
                         {listing.propertyType === 'commercial' && (
                             <>
                                 <option value="office">Office</option>
@@ -113,8 +109,8 @@ function REInput() {
                                 <option value="condominium">Condominium</option>
                                 <option value="townhouse">Townhouse</option>
                                 <option value="cooperative">Co-op</option>
-                                <option value="modularHome">Modular and Prefabricated Homes</option>
-                                <option value="mobileHome">Mobile Homes</option>
+                                <option value="modularHome">Modular Home</option>
+                                <option value="mobileHome">Mobile Home</option>
                             </>
                         )}
                         {listing.propertyType === 'land' && (
@@ -129,126 +125,102 @@ function REInput() {
                         )}
                     </select>
                 </div>
-
-                
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="lotAcres" className="form-label">Lot Size (Acres)</label>
-                    <input type="number" className="form-control" id="lotAcres" name="lotAcres" value={listing.lotAcres} onChange={handleChange} />
+                <div className="col-md-3">
+                    <label className="form-label">Zoning</label>
+                    <select className="form-select form-select-sm" name="zoning" value={listing.zoning} onChange={handleChange} required>
+                        <option value="">Select Zoning</option>
+                        <optgroup label="Residential Zoning">
+                            <option value="R1">R1 - Single-Family Residential</option>
+                            <option value="R2">R2 - Multi-Family Residential</option>
+                            <option value="R3">R3 - High-Density Residential</option>
+                        </optgroup>
+                        <optgroup label="Commercial Zoning">
+                            <option value="C1">C1 - Neighborhood Commercial</option>
+                            <option value="C2">C2 - General Commercial</option>
+                            <option value="C3">C3 - Heavy Commercial</option>
+                        </optgroup>
+                        <optgroup label="Industrial Zoning">
+                            <option value="I1">I1 - Light Industrial</option>
+                            <option value="I2">I2 - General Industrial</option>
+                            <option value="I3">I3 - Heavy Industrial</option>
+                        </optgroup>
+                        <optgroup label="Agricultural Zoning">
+                            <option value="A1">A1 - Agricultural</option>
+                            <option value="A2">A2 - Rural Agricultural</option>
+                        </optgroup>
+                        <optgroup label="Mixed Use">
+                            <option value="MU">MU - Mixed Use</option>
+                            <option value="PUD">PUD - Planned Unit Development</option>
+                        </optgroup>
+                    </select>
                 </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="titleCompany" className="form-label">Title Company</label>
-                    <input type="text" className="form-control" id="titleCompany" name="titleCompany" value={listing.titleCompany} onChange={handleChange} />
+                <div className="col-md-3">
+                    <label className="form-label">Status</label>
+                    <select className="form-select form-select-sm" name="status" value={listing.status} onChange={handleChange} required>
+                        <option value="null">Status</option>
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="sold">Sold</option>
+                    </select>
                 </div>
             </div>
 
-            <div className="row mb-3">
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="streetAddress" className="form-label">Street Address</label>
-                    <input type="text" className="form-control" id="streetAddress" name="streetAddress" value={listing.streetAddress} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="city" className="form-label">City</label>
-                    <input type="text" className="form-control" id="city" name="city" value={listing.city} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="state" className="form-label">State</label>
-                    <input type="text" className="form-control" id="state" name="state" value={listing.state} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="zipCode" className="form-label">Zip Code</label>
-                    <input type="text" className="form-control" id="zipCode" name="zipCode" value={listing.zipCode} onChange={handleChange} />
-                </div>
-            </div>
-
-            <div className="row mb-3">
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="bedrooms" className="form-label">Bedrooms</label>
-                    <input type="number" className="form-control" id="bedrooms" name="bedrooms" value={listing.bedrooms} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="bathrooms" className="form-label">Bathrooms</label>
-                    <input type="number" className="form-control" id="bathrooms" name="bathrooms" value={listing.bathrooms} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="halfBathrooms" className="form-label">Half Bathrooms</label>
-                    <input type="number" className="form-control" id="halfBathrooms" name="halfBathrooms" value={listing.halfBathrooms} onChange={handleChange} />
-                </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <div className="d-flex align-items-center mb-2">
-                        <label htmlFor="listingExpires" className="form-label">Contract Length</label>
-                        <div className="form-check me-2">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                id="expiresIn3Months"
-                                name="contractLength"
-                                value="3"
-                                checked={listing.contractLength === '3'}
-                                onChange={() => handleListingExpiresChange(3)}
-                            />
-                            <label htmlFor="expiresIn3Months" className="form-check-label">3</label>
-                        </div>
-                        <div className="form-check me-2">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                id="expiresIn6Months"
-                                name="contractLength"
-                                value="6"
-                                checked={listing.contractLength === '6'}
-                                onChange={() => handleListingExpiresChange(6)}
-                            />
-                            <label htmlFor="expiresIn6Months" className="form-check-label">6</label>
-                        </div>
-                        <div className="form-check">
-                            <input
-                                className="form-check-input"
-                                type="radio"
-                                id="expiresIn12Months"
-                                name="contractLength"
-                                value="12"
-                                checked={listing.contractLength === '12'}
-                                onChange={() => handleListingExpiresChange(12)}
-                            />
-                            <label htmlFor="expiresIn12Months" className="form-check-label">12</label>
-                        </div>
+            {/* Pricing & MLS Number */}
+            <div className="row g-2 mt-2">
+                {[
+                    { name: 'listPrice', label: 'List Price', type: 'number' },
+                    { name: 'sellerFee', label: "Buyer's Side Comp", type: 'text' },
+                    { name: 'parcelNumber', label: 'Parcel Number', type: 'text' },
+                    { name: 'mlsNumber', label: 'MLS Number', type: 'text' }
+                ].map((field, idx) => (
+                    <div className="col-md-3" key={idx}>
+                        <input type={field.type} className="form-control form-control-sm" placeholder={field.label}
+                            name={field.name} value={listing[field.name]} onChange={handleChange} />
                     </div>
-                    <input
-                        type="date"
-                        className="form-control"
-                        id="listingExpires"
-                        name="listingExpires"
-                        value={listing.listingExpires}
-                        onChange={handleCustomDateChange}
-                    />
-                </div>   
+                ))}
             </div>
-
-            <div className="row mb-3">
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="listPrice" className="form-label">List Price</label>
-                    <input type="number" className="form-control" id="listPrice" name="listPrice" value={listing.listPrice} onChange={handleChange} />
+            {/* Contract Length & Expiration */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-6">
+                    <label className="form-label">Contract Length</label>
+                    <div className="d-flex justify-content-start gap-3">
+                        {['3', '6', '12'].map((months) => (
+                            <div className="form-check" key={months}>
+                                <input type="radio" className="form-check-input" id={`expiresIn${months}Months`}
+                                    name="contractLength" value={months} checked={listing.contractLength === months}
+                                    onChange={() => handleListingExpiresChange(months)} />
+                                <label htmlFor={`expiresIn${months}Months`} className="form-check-label ms-1">
+                                    {months} Months
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="sellerFee" className="form-label">Compensation</label>
-                    <input type="text" className="form-control" id="sellerFee" name="sellerFee" value={listing.sellerFee} onChange={handleChange} />
+                <div className="col-md-6">
+                    <label className="form-label">Expiration Date</label>
+                    <input type="date" className="form-control form-control-sm" name="listingExpires"
+                        value={listing.listingExpires} onChange={handleCustomDateChange} />
                 </div>
-   
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="parcelNumber" className="form-label">Parcel Number</label>
-                    <input type="text" className="form-control" id="parcelNumber" name="parcelNumber" value={listing.parcelNumber} onChange={handleChange} />
-                </div>  
-                <div className="col-md-4 col-lg-3 mb-3">
-                    <label htmlFor="listingLink" className="form-label">Listing Link</label>
-                    <input type="text" className="form-control" id="listingLink" name="listingLink" value={listing.listingLink} onChange={handleChange} />
-                </div>   
-            </div>
-            <div className="row mb-3">
+                <div className="col-md-3">
+                    <label className="form-label">Listing Link</label>
+                    <input type="text" className="form-control form-control-sm" placeholder="Listing Link"
+                        name="listingLink" value={listing.listingLink} onChange={handleChange} />
+                </div>
                 
             </div>
 
-            <div className="col-12">
-                <button type="submit" className="btn btn-primary w-100">Submit Listing</button>
+            {/* Property Description */}
+            <div className="row g-2 mt-2">
+                <div className="col-md-12">
+                    <label className="form-label">Property Description</label>
+                    <textarea className="form-control form-control-sm" rows="3" placeholder="Enter property details..."
+                        name="propertyDescription" value={listing.propertyDescription} onChange={handleChange} />
+                </div>
+            </div>
+
+            {/* Submit Button */}
+            <div className="text-center mt-3">
+                <button type="submit" className="btn btn-primary btn-sm px-4 py-1">Submit</button>
             </div>
         </form>
     );
