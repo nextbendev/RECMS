@@ -1,9 +1,8 @@
 // src/App.js
 import React from 'react';
 import './App.css';
+import { GlobalProvider } from './contexts/GlobalContext'; // Import Global State
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { PropertyProvider } from './contexts/PropertyContext';
-import { ContactProvider } from './contexts/ContactsContext';
 import { UserProvider } from './contexts/UserContext';
 import Form from './Components/Form';
 import Login from './Components/Login';
@@ -16,8 +15,8 @@ import Dashboard from './Pages/Dashboard';
 import RealEstateContainer from './Pages/RealEstateContainer';
 import PropertyDetail from './Components/PropertyDetail';
 import PropertyEdit from './Components/PropertyEdit';
-import RealEstateProfile from './Pages/Profile';
 import MyProfile from './Pages/MyProfile.js';
+import Profile from './Pages/Profile';
 import NewsFeed from './Pages/NewsFeed.js';
 import Messages from './Pages/Messages.js';
 import Mailbox from './Pages/Mailbox.js';
@@ -27,46 +26,44 @@ import SignUp from './Pages/SignUp.js';
 
 function App() {
   return (
-    <PropertyProvider>
-      <ContactProvider>
-        <UserProvider>
-          <Router>
-            <div className="App">
-              <Header />
-              <div className="container-fluid">
-                <div className="row">
-                  <Sidebar />
-                  <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <Routes>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/contacts" element={<Contacts contactType="contact"/>} />
-                      <Route path="/contact/:id" element={<User />} />
-                      <Route path="/prospect/:id" element={<User />} />
-                      <Route path="/tasks" element={<Tasks />} />
-                      <Route path="/form" element={<Form />} />
-                      <Route path="/login" element={<Login />} />
-                      {/* <Route path="/myListings" element={<RealEstateContainer creatorId={user.creatorId} />} /> */}
-                      <Route path="/myListings" element={<RealEstateContainer creatorId={34895734} />} />
-                      <Route path="/allListings" element={<RealEstateContainer />} /> 
-                      <Route path="/property/:id" element={<PropertyDetail />} />
-                      <Route path="/edit/:id" element={<PropertyEdit />} />
-                      <Route path="/profile" element={<RealEstateProfile />} />
-                      <Route path="/myProfile" element={<MyProfile/>} />
-                      <Route path="/feed" element={<NewsFeed/>} />
-                      <Route path="/messages" element={<Messages/>} />
-                      <Route path="/mailbox" element={<Mailbox/>} />
-                      <Route path="/closedTasks" element={<ClosedTasks/>} />
-                      <Route path="/bulletinBoard" element={<BulletinBoard/>} />
-                      <Route path="/signUp" element={<SignUp/>} />
-                    </Routes>
-                  </main>
+    <GlobalProvider>
+          <UserProvider>
+            <Router>
+              <div className="App">
+                <Header />
+                <div className="container-fluid">
+                  <div className="row">
+                    <Sidebar />
+                    <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                      <Routes>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path="/contacts" element={<Contacts contactType="contact"/>} />
+                        <Route path="/contact/:id" element={<User />} />
+                        <Route path="/prospect/:id" element={<User />} />
+                        <Route path="/tasks" element={<Tasks />} />
+                        <Route path="/form" element={<Form />} />
+                        <Route path="/login" element={<Login />} />
+                        {/* <Route path="/myListings" element={<RealEstateContainer creatorId={user.creatorId} />} /> */}
+                        <Route path="/myListings" element={<RealEstateContainer creatorId={34895734} />} />
+                        <Route path="/allListings" element={<RealEstateContainer />} /> 
+                        <Route path="/property/:id" element={<PropertyDetail />} />
+                        <Route path="/edit/:id" element={<PropertyEdit />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/myProfile" element={<MyProfile/>} />
+                        <Route path="/feed" element={<NewsFeed/>} />
+                        <Route path="/messages" element={<Messages/>} />
+                        <Route path="/mailbox" element={<Mailbox/>} />
+                        <Route path="/closedTasks" element={<ClosedTasks/>} />
+                        <Route path="/bulletinBoard" element={<BulletinBoard/>} />
+                        <Route path="/signUp" element={<SignUp/>} />
+                      </Routes>
+                    </main>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Router>
-        </UserProvider>
-      </ContactProvider>
-    </PropertyProvider>
+            </Router>
+          </UserProvider>
+    </GlobalProvider>
   );
 }
 

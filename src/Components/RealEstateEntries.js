@@ -169,12 +169,7 @@ function RealEstateEntries({ properties, pageTitle }) {
         {currentProperties.map((property) => (
           <div className="col" key={property.parcelNumber} onClick={() => handlePropertyClick(property.parcelNumber)}>
             <div className="card h-100 shadow-sm" style={{ cursor: 'pointer' }}>
-              <img
-                src={property.imageUrl || 'https://via.placeholder.com/150'}
-                className="card-img-top"
-                alt={`${property.streetAddress}`}
-                style={{ height: '180px', objectFit: 'cover' }}
-              />
+            <img src={require(`../assets/${property.imageUrl}`)} alt="Property" />
               <div className="card-body">
                 <h5 className="card-title">{property.streetAddress}</h5>
                 <p className="card-text">
@@ -188,6 +183,7 @@ function RealEstateEntries({ properties, pageTitle }) {
           </div>
         ))}
       </div>
+      
 
       {/* Pagination */}
       <nav aria-label="Page navigation example" className="mt-4">

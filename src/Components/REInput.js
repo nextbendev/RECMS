@@ -18,6 +18,10 @@ function REInput() {
         listingExpires: '', listPrice: '', sellerFee: '',
         parcelNumber: '', listingLink: '', mlsNumber: '', 
         status: '', propertyDescription: '',
+        mailAddress: '',
+        mailCity: '',
+        mailSt: '',
+        mailZip: '',
     });
 
     const handleChange = (e) => {
@@ -66,7 +70,7 @@ function REInput() {
             {/* Location */}
             <div className="row g-2 mt-2">
                 {[
-                    { name: 'streetAddress', label: 'Street Address' },
+                    { name: 'streetAddress', label: 'Listing Street' },
                     { name: 'city', label: 'City' },
                     { name: 'state', label: 'State' },
                     { name: 'zipCode', label: 'Zip Code' }
@@ -78,6 +82,19 @@ function REInput() {
                 ))}
             </div>
 
+            <div className="row g-2 mt-2">
+                {[
+                    { name: 'mailAddress', label: 'Mailing Street ' },
+                    { name: 'mailCity', label: 'Mailing City' },
+                    { name: 'mailState', label: 'Mailing State' },
+                    { name: 'mailZipCode', label: 'Mailing Zip Code' }
+                ].map((field, idx) => (
+                    <div className="col-md-3" key={idx}>
+                        <input type="text" className="form-control form-control-sm" placeholder={field.label}
+                            name={field.name} value={listing[field.name]} onChange={handleChange} />
+                    </div>
+                ))}
+            </div>
             {/* Property Type & Subtype */}
             <div className="row g-2 mt-2">
                 <div className="col-md-3">
@@ -161,6 +178,7 @@ function REInput() {
                         <option value="active">Active</option>
                         <option value="pending">Pending</option>
                         <option value="sold">Sold</option>
+                        <option value="expired">Expired</option>
                     </select>
                 </div>
             </div>
@@ -202,10 +220,16 @@ function REInput() {
                         value={listing.listingExpires} onChange={handleCustomDateChange} />
                 </div>
                 <div className="col-md-3">
+                    <label className="form-label">Title Company</label>
+                    <input type="text" className="form-control form-control-sm" placeholder="Title Company"
+                        name="titleCompany" value={listing.titleCompany} onChange={handleChange} />
+                </div>
+                <div className="col-md-3">
                     <label className="form-label">Listing Link</label>
                     <input type="text" className="form-control form-control-sm" placeholder="Listing Link"
                         name="listingLink" value={listing.listingLink} onChange={handleChange} />
                 </div>
+                
                 
             </div>
 

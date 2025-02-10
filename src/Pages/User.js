@@ -1,41 +1,49 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';  // Import useNavigate
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGlobalState } from '../contexts/GlobalContext';
 import UserDetails from '../Components/UserDetails';
 import AddTaskForm from '../Components/AddTaskForm';
 import EditUserForm from '../Components/EditUserForm';
 
 function User() {
-  const location = useLocation();
-  const navigate = useNavigate();  // Initialize navigate function
+  const { id } = useParams(); 
+  const { state } = useGlobalState();
+  const navigate = useNavigate();
 
-  // Memoize the user object
-  const user = useMemo(() => {
-    return location.state?.customer || location.state?.prospect || location.state?.contact || {};
-  }, [location.state]);
+  
 
-  const [tasks, setTasks] = useState(user.tasks || []);
+  // Get user from Global Context
+  const user = state.contacts.find((contact) => contact.id === Number(id)) || {};
+
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({ ...user });
+  const [userData, setUserData] = useState(user);  // ✅ Fix: Prevent infinite state updates
 
   useEffect(() => {
-    if (user.tasks) {
-      setTasks(user.tasks);
-    }
-  }, [user.tasks]);
+    setUserData(user);
+    console.log("use effect") // ✅ Updates userData only when `user` changes
+  }, [user]);
 
   const handleAddTask = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setUserData((prevUser) => ({
+      ...prevUser,
+      tasks: [...(prevUser.tasks || []), newTask], // ✅ Ensure `tasks` is always an array
+    }));
+    console.log(" handle add task")
   };
 
   const handleSave = (updatedUserData) => {
+    console.log("hande")
     setUserData(updatedUserData);
     setIsEditing(false);
-    // Save the updated data to the database if necessary
   };
+
+  if (!user.id) {
+    console.log("if")
+    return <p>Error: No contact found with ID {id}</p>;
+  }
 
   return (
     <div>
-      {/* Back button */}
       <button className="btn btn-light mt-2" onClick={() => navigate(-1)}>
         &larr; Back
       </button>
@@ -45,14 +53,10 @@ function User() {
       ) : (
         <>
           <button className="btn btn-secondary mt-2" onClick={() => setIsEditing(true)}>Edit</button>
-          <UserDetails userData={{ ...userData, tasks }} />
-          <AddTaskForm 
-            onAddTask={handleAddTask} 
-            contactId={user.id}  
-          />
+          <UserDetails userData={{ ...userData }} setUserData={setUserData}  />
+          <AddTaskForm onAddTask={handleAddTask} contactId={user.id} />
         </>
       )}
-      
     </div>
   );
 }

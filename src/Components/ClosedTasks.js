@@ -1,8 +1,10 @@
 import React, { useContext, useMemo } from 'react';
+import { useGlobalState } from '../contexts/GlobalContext';
 import { ContactContext } from '../contexts/ContactsContext';
 
 function ClosedTasks() {
-  const { contacts } = useContext(ContactContext);
+  const { state } = useGlobalState();
+  const contacts  = state.contacts
 
   // ✅ Use `useMemo` for efficient filtering
   const closedTasks = useMemo(() => {

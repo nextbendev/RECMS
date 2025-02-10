@@ -1,166 +1,109 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import zipcodes from 'zipcodes';
+import { useGlobalState } from '../contexts/GlobalContext';
 
-function RealEstateEntries({ properties, pageTitle }) {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filters, setFilters] = useState({
-        zipCode: '',
-        distance: '',
-        bedrooms: '',
-        bathrooms: '',
-        acreage: '',
-        priceMin: '',
-        priceMax: '',
-        livingSqFt: '',
-        totalSqFt: '',
-        yearBuilt: '',
-        zoning: '',
-    });
+import { Link } from 'react-router-dom';
 
-    const propertiesPerPage = 12;
-    const navigate = useNavigate();
+function Contacts() {
 
-    // Function to calculate distance between two ZIP codes
-    const getDistance = (zip1, zip2) => {
-        if (!zip1 || !zip2) return Infinity;
+  const context = useGlobalState();
+  if (!context) {
+    console.error("GlobalContext is not available.");
+    return <p>Error: Context not found</p>;
+  }
+  const { state } = useGlobalState();
+  const contacts = state.contacts;
+  console.log("conysad", state)
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('all'); // Tabs: 'all', 'contacts', 'prospects'
 
-        const location1 = zipcodes.lookup(zip1);
-        const location2 = zipcodes.lookup(zip2);
+  // Filter contacts based on selected tab
+  const filteredContacts = contacts.filter(contact => {
+    if (activeTab === 'contacts') return contact.contactType === 'contact';
+    if (activeTab === 'prospects') return contact.contactType === 'prospect';
+    return true; // 'all' shows everything
+  });
 
-        if (!location1 || !location2) return Infinity;
 
-        const R = 3958.8; // Radius of Earth in miles
-        const lat1 = (location1.latitude * Math.PI) / 180;
-        const lon1 = (location1.longitude * Math.PI) / 180;
-        const lat2 = (location2.latitude * Math.PI) / 180;
-        const lon2 = (location2.longitude * Math.PI) / 180;
+  
+  // Navigate to contact detail page
+  const handleContactClick = (contact) => {
+    console.log("Navigating to contact:", contact);
+    navigate(`/contact/${contact.id}`, { state: { contact } });
+  };
 
-        const dLat = lat2 - lat1;
-        const dLon = lon2 - lon1;
-        const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return (
+    <div className="container mt-3">
+      {/* Tabs for switching between Contacts, Prospects, and All */}
+      <ul className="nav nav-tabs mb-3">
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${activeTab === 'all' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('all')}
+          >
+            All
+          </button>
+        </li>
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${activeTab === 'contacts' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('contacts')}
+          >
+            Contacts
+          </button>
+        </li>
+        <li className="nav-item">
+          <button 
+            className={`nav-link ${activeTab === 'prospects' ? 'active' : ''}`} 
+            onClick={() => setActiveTab('prospects')}
+          >
+            Prospects
+          </button>
+        </li>
+      </ul>
 
-        return R * c; // Distance in miles
-    };
+      {/* Header with Add Contact button */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>{activeTab === 'prospects' ? 'Prospects' : activeTab === 'contacts' ? 'Contacts' : 'All Contacts'}</h2>
+        <Link className="btn btn-primary" to="/form">
+          + Add Contact
+        </Link>
+      </div>
 
-    // Handle filter input changes
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters({ ...filters, [name]: value });
-    };
-
-    // Filter listings based on search term and distance
-    const filteredProperties = properties.filter((property) => {
-        const { streetAddress, parcelNumber, listPrice, zipCode } = property;
-
-        const matchesSearchTerm =
-            streetAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            parcelNumber.toString().includes(searchTerm) ||
-            listPrice.toString().includes(searchTerm);
-
-        const matchesDistance =
-            filters.zipCode === '' ||
-            filters.distance === '' ||
-            getDistance(filters.zipCode, zipCode) <= Number(filters.distance);
-
-        return matchesSearchTerm && matchesDistance;
-    });
-
-    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
-    const indexOfLastProperty = currentPage * propertiesPerPage;
-    const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
-    const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
-
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    const handlePropertyClick = (parcelNumber) => {
-        navigate(`/property/${parcelNumber}`);
-    };
-
-    return (
-        <div className="container mt-3">
-            <h1 className="mb-4">{pageTitle}</h1>
-
-            {/* Search and Filters */}
-            <div className="row mb-2">
-                <div className="col-md-6 mb-2">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search by Address, MLS Number..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
-                <div className="col-md-3 mb-2">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Enter ZIP Code"
-                        name="zipCode"
-                        value={filters.zipCode}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-                <div className="col-md-3 mb-2">
-                    <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Distance (miles)"
-                        name="distance"
-                        value={filters.distance}
-                        onChange={handleFilterChange}
-                    />
-                </div>
-            </div>
-
-            {/* Properties Display */}
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                {currentProperties.map((property) => (
-                    <div className="col" key={property.parcelNumber} onClick={() => handlePropertyClick(property.parcelNumber)}>
-                        <div className="card h-100 shadow-sm" style={{ cursor: 'pointer' }}>
-                            <img
-                                src={property.imageUrl || 'https://via.placeholder.com/150'}
-                                className="card-img-top"
-                                alt={property.streetAddress}
-                                style={{ height: '180px', objectFit: 'cover' }}
-                            />
-                            <div className="card-body">
-                                <h5 className="card-title">{property.streetAddress}</h5>
-                                <p className="card-text"><strong>{`${property.city}, ${property.state} ${property.zipCode}`}</strong></p>
-                                <div className="row">
-                                    <div className="col-6">
-                                        <div>Price:</div>
-                                        <div><strong>${property.listPrice}</strong></div>
-                                    </div>
-                                    <div className="col-6">
-                                        <div>MLS #:</div>
-                                        <div><strong>{property.parcelNumber}</strong></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {filteredProperties.length === 0 && <div className="text-center mt-4">No properties found.</div>}
-
-            {/* Pagination */}
-            <nav aria-label="Page navigation example" className="mt-4">
-                <ul className="pagination justify-content-center">
-                    {[...Array(totalPages)].map((_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-        </div>
-    );
+      {/* Contact Table */}
+      <div className="table-responsive">
+        <table className="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredContacts.length > 0 ? (
+              filteredContacts.map((contact, index) => (
+                <tr key={contact.id} onClick={() => handleContactClick(contact)} style={{ cursor: 'pointer' }}>
+                  <td>{index + 1}</td>
+                  <td>{contact.name}</td>
+                  <td>{contact.email}</td>
+                  <td>{contact.phone}</td>
+                  <td>{contact.address}</td>
+                  <td>{contact.role}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center">No contacts found.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
-export default RealEstateEntries;
+export default Contacts;

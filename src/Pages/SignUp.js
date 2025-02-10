@@ -9,6 +9,7 @@ function SignUp() {
     confirmPassword: "",
     nrdsNumber: "",
     licenseNumber: "",
+    brokerage: "", // Added field for Brokerage
   });
 
   const [errors, setErrors] = useState({});
@@ -30,8 +31,8 @@ function SignUp() {
     if (!formData.password) validationErrors.password = "Password is required.";
     else if (formData.password.length < 6) validationErrors.password = "Password must be at least 6 characters.";
     if (formData.password !== formData.confirmPassword) validationErrors.confirmPassword = "Passwords do not match.";
-    // if (!formData.nrdsNumber.trim()) validationErrors.nrdsNumber = "NRDS Number is required.";
     if (!formData.licenseNumber.trim()) validationErrors.licenseNumber = "License Number is required.";
+    if (!formData.brokerage.trim()) validationErrors.brokerage = "Brokerage is required."; // Validation for Brokerage
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -44,13 +45,14 @@ function SignUp() {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card shadow-sm p-5" style={{ width: "500px" }}>
+      <div className="card shadow-sm p-5" style={{ width: "600px" }}>
         <h2 className="text-center mb-4">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="row mb-3">
             <div className="col">
               <label htmlFor="firstName">First Name</label>
               <input
+                placeholder= "Required"
                 type="text"
                 id="firstName"
                 name="firstName"
@@ -63,6 +65,7 @@ function SignUp() {
             <div className="col">
               <label htmlFor="lastName">Last Name</label>
               <input
+                placeholder= "Required"
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -78,6 +81,7 @@ function SignUp() {
             <div className="col">
               <label htmlFor="email">Email</label>
               <input
+                placeholder= "Required"
                 type="email"
                 id="email"
                 name="email"
@@ -142,6 +146,20 @@ function SignUp() {
               />
               {errors.licenseNumber && <div className="invalid-feedback">{errors.licenseNumber}</div>}
             </div>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="brokerage">Brokerage</label>
+            <input
+              placeholder= "Required"
+              type="text"
+              id="brokerage"
+              name="brokerage"
+              className={`form-control ${errors.brokerage ? "is-invalid" : ""}`}
+              value={formData.brokerage}
+              onChange={handleChange}
+            />
+            {errors.brokerage && <div className="invalid-feedback">{errors.brokerage}</div>}
           </div>
 
           <button type="submit" className="btn btn-primary w-100 mt-3">

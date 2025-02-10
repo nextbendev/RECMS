@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
 import RealEstateEntries from '../Components/RealEstateEntries';
-import { PropertyContext } from '../contexts/PropertyContext';
+import { useGlobalState } from '../contexts/GlobalContext';
+
 
 function RealEstateContainer({ creatorId }) {
-    const { properties } = useContext(PropertyContext);
+    const { state } = useGlobalState();
+    const properties = state.properties;
+    
 
     // Filter properties by creatorId if provided, else show all
     const filteredProperties = creatorId 

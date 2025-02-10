@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Stylesheets/Form.css';
-import EndUser from './EndUser';
+import Contact from './Contact';
 import REInput from './REInput';
 import LeadIntakeForm from './NewLead';
 import { useLocation } from 'react-router-dom';
@@ -109,7 +109,7 @@ function Form() {
       {formData.role === 'contact' && (
         <div>
           <h3>Contact Information</h3>
-          <EndUser />
+          <Contact/>
         </div>
       )}
       {formData.role === 'lead' && (

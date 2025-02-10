@@ -1,17 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { PropertyContext } from '../contexts/PropertyContext';
+import { useGlobalState } from '../contexts/GlobalContext';
 
 function PropertyDetail() {
     const { id } = useParams();
-    const { properties } = useContext(PropertyContext);
+    const { state } = useGlobalState(); // ✅ Use global state
     const [property, setProperty] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const foundProperty = properties.find(p => p.parcelNumber === id);
-        setProperty(foundProperty);
-    }, [id, properties]);
+        if (state?.properties) {
+            const foundProperty = state.properties.find(p => p.parcelNumber === id);
+            setProperty(foundProperty);
+        }
+    }, [id, state?.properties]);
 
     if (!property) {
         return <div>Loading...</div>;
@@ -42,7 +44,7 @@ function PropertyDetail() {
                     <div className="row mt-3">
                         <div className="col-md-6">
                             <p><strong>List Price:</strong> ${property.listPrice}</p>
-                            <p><strong>MLS #:</strong> {property.parcelNumber}</p>
+                            <p><strong>MLS #:</strong> {property.mlsNumber}</p>
                             <p><strong>Bedrooms:</strong> {property.bedrooms}</p>
                             <p><strong>Bathrooms:</strong> {property.bathrooms}</p>
                             <p><strong>Acreage:</strong> {property.acreage} acres</p>
@@ -64,14 +66,13 @@ function PropertyDetail() {
                         <div className="col-md-6">
                             <div>More Info</div>
                             <a
-                                href="https://google.com"
+                                href={property.listingLink || "https://google.com"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <div><strong>Click Here</strong></div>
                             </a>
                         </div>
-                        
                     </div>
 
                 </div>

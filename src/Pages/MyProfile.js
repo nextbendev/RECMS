@@ -1,34 +1,25 @@
-import React, { useState } from 'react';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaHome, FaBriefcase, FaBuilding, FaFacebook, FaLinkedin, FaTwitter, FaEdit, FaPaperPlane } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaBriefcase, FaFacebook, FaLinkedin, FaTwitter, FaEdit, FaPaperPlane } from 'react-icons/fa';
+import { useGlobalState } from '../contexts/GlobalContext';
 
 function MyProfile() {
-  const [posts, setPosts] = useState([]);
+  const { state, dispatch } = useGlobalState(); // ✅ Get user & properties from global context
+  const user = state.user || {}; // Ensure user is defined
+  const listings = state.properties?.filter((property) => property.creatorID === Number(user.userId)) || []; // Get only user-created listings
+
   const [newPost, setNewPost] = useState('');
-  
-  // Sample Profile Data
-  const profile = {
-    name: "John Doe",
-    title: "Luxury Real Estate Specialist",
-    location: "Los Angeles, CA",
-    phone: "+1 (123) 456-7890",
-    email: "johndoe@realestate.com",
-    brokerage: "Luxury Realty Group",
-    specialization: ["Luxury Homes", "Investment Properties", "First-Time Buyers"],
-    bio: "Helping clients find their dream homes with personalized service and expert market knowledge.",
-    socialLinks: {
-      facebook: "https://facebook.com/johndoe",
-      linkedin: "https://linkedin.com/in/johndoe",
-      twitter: "https://twitter.com/johndoe",
-    },
-    listings: [
-      { id: 1, title: "Modern Villa in Beverly Hills", price: "$3,200,000", image: "https://placehold.co/50" },
-      { id: 2, title: "Luxury Penthouse in Downtown LA", price: "$2,500,000", image: "https://placehold.co/50" },
-    ],
-  };
+
+  // Load posts from global state
+  const [posts, setPosts] = useState(user.posts || []);
+
+  useEffect(() => {
+    // Sync posts with global context when user changes
+    setPosts(user.posts || []);
+  }, [user.posts]);
 
   // Handle new post submission
   const handlePostSubmit = () => {
-    if (!newPost.trim()) return; // Prevent empty posts
+    if (!newPost.trim()) return;
 
     const post = {
       id: Date.now(),
@@ -36,8 +27,15 @@ function MyProfile() {
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    setPosts([post, ...posts]); // Add new post at the top
-    setNewPost(''); // Clear input
+    // Update global context
+    dispatch({
+      type: "ADD_POST",
+      payload: { userId: user.userId, post },
+    });
+
+    // Update local state
+    setPosts([post, ...posts]);
+    setNewPost('');
   };
 
   return (
@@ -46,13 +44,12 @@ function MyProfile() {
         {/* Profile Header */}
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex align-items-center">
-            <img src="https://placehold.co/50" alt="Profile" className="rounded-circle me-3" />
+            <img src={user.profilePicture || "https://placehold.co/150"} alt="Profile" className="rounded-circle me-3" />
             <div>
-              <h3 className="mb-1">{profile.name}</h3>
-              <p className="text-muted">{profile.title} at {profile.brokerage}</p>
+              <h3 className="mb-1">{user.name || "Your Name"}</h3>
+              <p className="text-muted">{user.brokerage || "Your Brokerage"}</p>
             </div>
           </div>
-          {/* Edit Profile Button */}
           <button className="btn btn-outline-primary">
             <FaEdit className="me-1" /> Edit Profile
           </button>
@@ -60,51 +57,52 @@ function MyProfile() {
 
         {/* Contact Info */}
         <div className="mt-3">
-          <p><FaPhone className="me-2 text-primary" /> {profile.phone}</p>
-          <p><FaEnvelope className="me-2 text-primary" /> {profile.email}</p>
-          <p><FaMapMarkerAlt className="me-2 text-primary" /> {profile.location}</p>
+          <p><FaPhone className="me-2 text-primary" /> {user.cellPhone || "N/A"}</p>
+          <p><FaEnvelope className="me-2 text-primary" /> {user.email || "N/A"}</p>
+          <p><FaMapMarkerAlt className="me-2 text-primary" /> {user.location || "Your Location"}</p>
         </div>
 
         {/* Specializations */}
         <div className="mt-3">
           <h5>Specializations</h5>
-          <ul className="list-group">
-            {profile.specialization.map((specialty, index) => (
-              <li key={index} className="list-group-item">
-                <FaBriefcase className="me-2 text-success" /> {specialty}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Bio */}
-        <div className="mt-3">
-          <h5>About Me</h5>
-          <p className="text-muted">{profile.bio}</p>
+          {user.specializations && user.specializations.length > 0 ? (
+            <ul className="list-group">
+              {user.specializations.map((specialty, index) => (
+                <li key={index} className="list-group-item">
+                  <FaBriefcase className="me-2 text-success" /> {specialty}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted">No specializations listed.</p>
+          )}
         </div>
 
         {/* Active Listings */}
         <div className="mt-3">
-          <h5>Active Listings</h5>
-          <div className="row">
-            {profile.listings.map((listing) => (
-              <div key={listing.id} className="col-md-4 mb-3">
-                <div className="card">
-                  <img src={listing.image} className="card-img-top" alt={listing.title} />
-                  <div className="card-body text-center">
-                    <h6 className="card-title">{listing.title}</h6>
-                    <p className="text-primary">{listing.price}</p>
+          <h5>My Listings</h5>
+          {listings.length > 0 ? (
+            <div className="row">
+              {listings.map((listing) => (
+                <div key={listing.parcelNumber} className="col-md-4 mb-3">
+                  <div className="card">
+                    <img src={listing.imageUrl || "https://via.placeholder.com/150"} className="card-img-top" alt={listing.streetAddress} />
+                    <div className="card-body text-center">
+                      <h6 className="card-title">{listing.streetAddress}</h6>
+                      <p className="text-primary">${listing.listPrice}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted">No active listings yet.</p>
+          )}
         </div>
 
         {/* Post Feed */}
         <div className="mt-3">
           <h5>Post Updates</h5>
-          {/* Post Input Box */}
           <div className="card p-3 mb-3">
             <textarea
               className="form-control"
@@ -118,21 +116,36 @@ function MyProfile() {
             </button>
           </div>
 
-         
+          {/* Display Posts */}
+          {posts.length > 0 ? (
+            <ul className="list-group">
+              {posts.map((post) => (
+                <li key={post.id} className="list-group-item">
+                  {post.content} <small className="text-muted">({post.timestamp})</small>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted">No updates yet.</p>
+          )}
         </div>
 
         {/* Social Links */}
         <div className="mt-3 text-center">
           <h5>Connect with Me</h5>
-          <a href={profile.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
-            <FaFacebook />
-          </a>
-          <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-secondary me-2">
-            <FaLinkedin />
-          </a>
-          <a href={profile.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="btn btn-info">
-            <FaTwitter />
-          </a>
+          {user.socialLinks && (
+            <>
+              <a href={user.socialLinks.facebook || "#"} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
+                <FaFacebook />
+              </a>
+              <a href={user.socialLinks.linkedin || "#"} target="_blank" rel="noopener noreferrer" className="btn btn-secondary me-2">
+                <FaLinkedin />
+              </a>
+              <a href={user.socialLinks.twitter || "#"} target="_blank" rel="noopener noreferrer" className="btn btn-info">
+                <FaTwitter />
+              </a>
+            </>
+          )}
         </div>
       </div>
     </div>

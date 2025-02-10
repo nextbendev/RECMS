@@ -72,7 +72,7 @@ function EditUserForm({ userData, onSave }) {
         {[
           { name: 'mailAddress', label: 'Street Address' },
           { name: 'mailCity', label: 'Mailing City' },
-          { name: 'mailState', label: 'Mailing State' },
+          { name: 'mailSt', label: 'Mailing State' },
           { name: 'mailZip', label: 'Mailing Zip' }
         ].map((field, idx) => (
           <div className="col-md-3 mb-3" key={idx}>

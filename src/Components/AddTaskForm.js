@@ -1,27 +1,33 @@
 import React, { useContext, useState, useEffect } from 'react';
-import Select from 'react-select'; // Import React-Select
+import Select from 'react-select';
+import { useGlobalState } from '../contexts/GlobalContext';
 import { ContactContext } from '../contexts/ContactsContext';
 
-
 function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
-  const { contacts } = useContext(ContactContext);
+  const { state } = useGlobalState();
+  const contacts = state.contacts;
+  
+
   const [taskType, setTaskType] = useState(defaultTaskType || 'call');
   const [taskDescription, setTaskDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [selectedContact, setSelectedContact] = useState(null);
 
-  // Convert contacts into react-select format
-  const contactOptions = contacts.map((contact) => ({
+  
+  const contactOptions = (contacts || []).map((contact) => ({
     value: contact.id,
     label: `${contact.name} - ${contact.email}`,
   }));
+  
 
+  // ✅ Only re-run when `contactId` changes
   useEffect(() => {
     if (contactId) {
+      console.log("task use effect");
       const preselectedContact = contactOptions.find((option) => option.value === contactId);
       setSelectedContact(preselectedContact || null);
     }
-  }, [contactId, contactOptions]);
+  }, [contactId]);  // ✅ Removed `contactOptions` from dependencies
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +41,7 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
     setTaskDescription('');
     setDueDate('');
     setSelectedContact(null);
+    console.log("submit", taskType, selectedContact, dueDate, taskDescription )
   };
 
   return (
@@ -56,7 +63,7 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
             <option value="appointment">Appointment</option>
             <option value="closing">Closing</option>
             <option value="inspection">Inspection</option>
-            <option value="dueDilligence">Due Dilligence Over</option>
+            <option value="dueDiligence">Due Diligence Over</option>
           </select>
         </div>
 
@@ -71,7 +78,7 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
           />
         </div>
 
-        {/* Contact Selector (Searchable Dropdown) */}
+        {/* Contact Selector */}
         {!contactId && (
           <div className="col-md-4">
             <Select
@@ -92,7 +99,7 @@ function AddTaskForm({ onAddTask, contactId, defaultTaskType }) {
         <div className="col-12">
           <textarea
             className="form-control form-control-sm"
-            style={{ height: '50px', resize: 'none' }} // Reduce input height
+            style={{ height: '50px', resize: 'none' }}
             placeholder="Task Description"
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
